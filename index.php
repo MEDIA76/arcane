@@ -78,7 +78,6 @@ ob_start('minify');
 			$page = path(DIR['PAGES'] . '/' . SET['404'] . '.php', true);
 		}
 		if(isset($page) && file_exists($page)) {
-			echo '404';
 			http_response_code(404);
 			if(!isset($content)) {
 				ob_start();
