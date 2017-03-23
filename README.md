@@ -6,7 +6,7 @@ Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple 
 arcane/
 ├── images/
 ├── includes/
-│   ├── .htaccess
+│   ├── php.htaccess
 │   ├── functions.php
 │   └── settings.php
 ├── languages/
@@ -21,7 +21,7 @@ arcane/
 
 ### Support
 
-- Requires Apache Server with PHP >= 7.0.0
+- Requires PHP >= 7.0.0
 
 [Creating an issue](https://github.com/databute/databute/issues) on GitHub for reporting bugs is always appreciated.
 
