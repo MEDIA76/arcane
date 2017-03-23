@@ -1,0 +1,46 @@
+<?php
+
+	function minify($filter) {
+		$return = str_replace(["\r\n", "\r", "\n", "\t", '  '], '', $filter);
+		return $return;
+	}
+
+	function scribe($filter) {
+		if(defined('TRANSCRIPT') && TRANSCRIPT[$filter]) {
+			$return = TRANSCRIPT[$filter];
+		} else {
+			$return = $filter;
+		}
+		return $return;
+	}
+
+	function path($filter, $actual = false) {
+		if(is_int($filter)) {
+			$return = @PATH[$filter];
+		} else {
+			if($actual) {
+				$return = $_SERVER['DOCUMENT_ROOT'];
+			} else {
+				if(!strpos(DIR['ROOT'], '://')) {
+					$return = '/';
+				}
+				$return = DIR['ROOT'];
+			}
+			if(preg_match('/.jpg|.jpeg|.png|.gif|.svg/', $filter) && !empty(DIR['IMAGES'])) {
+				$return .= DIR['IMAGES'];
+			} else if(strpos($filter, '.js') && !empty(DIR['SCRIPTS'])) {
+				$return .= DIR['SCRIPTS'];
+			} else if(strpos($filter, '.css') && !empty(DIR['STYLES'])) {
+				$return .= DIR['STYLES'];
+			} else if(!$actual && defined('LANGUAGE') && !strpos($filter, '.')) {
+				$filter = LANGUAGE . '' . $filter;
+			}
+			if(!strpos($filter, '.') && !strpos($filter, '?')) {
+				$filter .= '/';
+			}
+			$return = preg_replace('#(^|[^:])//+#', '\\1/', $return . '/' . $filter);
+		}
+		return $return;
+	}
+
+?>
