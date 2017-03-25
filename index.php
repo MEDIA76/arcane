@@ -48,7 +48,7 @@ do {
 	$page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
 	if(!is_file($page) && is_dir(rtrim($page, '.php') . '/')) {
 		$page = rtrim(str_replace('.php', '', $page), '/');
-		$page .= '/' . SET['INDEX'] . '.php';
+		$page = $page . '/' . SET['INDEX'] . '.php';
 	}
 	if(is_file($page)) {
 		ob_start();
@@ -56,21 +56,34 @@ do {
 			unset($page);
 		$content = ob_get_clean();
 		if(defined('ROUTE')) {
-			$route = array_filter(ROUTE, function($route) {
-				return !in_array(false, $route);
-			});
-			if($route) {
-				$path = array_merge(reset($route), $path);
-				$path = array_slice(PATH, 0, count($path));
+			$pseudo = array_diff_assoc(PATH, $path);
+			foreach(ROUTE as $route) {
+				if(count($route) === count($pseudo)) {
+					foreach(array_values($pseudo) as $increment => $segment) {
+						if(is_array($route[$increment])) {
+							if(!in_array($segment, $route[$increment])) {
+								break;
+							}
+						} else if($route[$increment] !== $segment) {
+							break;
+						}
+						if(end($pseudo) === $segment) {
+							$path = $path + $pseudo;
+							unset($pseudo, $route, $increment, $segment);
+							break 2;
+						}
+					}
+				}
 			}
-			unset($route);
 		}
 		if(end($path) !== SET['INDEX']) {
 			break;
 		}
+	} else if(empty($path)) {
+		return false;
 	}
 	array_pop($path);
-} while($path);
+} while(true);
 
 ob_start('minify');
 	if(array_diff(PATH, $path)) {

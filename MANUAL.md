@@ -36,33 +36,20 @@ path('/example/', true);
 > `define('TITLE', 'string')`: Sets page title. <nobr />  
 > `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('LAYOUT', 'filename')`: Sets page layout. <nobr />  
-> `define('ROUTE', array)`: Sets path routes that are allowed.
-
-
-``` php
-define('ROUTE', [
-	[
-		path(2) == 'example'
-	]
-]);
-```
+> `define('ROUTE', array)`: Sets acceptable page routes.
 
 ``` php
 define('ROUTE', [
 	[
-		path(2) == 'example-one',
-		path(3) == 'example-two'
+		'path-one-example-one'
 	],
 	[
-		path(2) == 'example-three'
-	]
-]);
-```
-
-``` php
-define('ROUTE', [
+		'path-one-example-two',
+		'path-two-example-two'
+	],
 	[
-		in_array(path(2), ['example-one', 'example-two']),
+		'path-one-example-three',
+		['path-two-example-three', 'path-two-example-three']
 	]
 ]);
 ```
