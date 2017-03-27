@@ -19,6 +19,7 @@ arcane/
 │   └── index.php
 ├── scripts/
 └── styles/
+└── index.php
 ```
 
 ### Support
