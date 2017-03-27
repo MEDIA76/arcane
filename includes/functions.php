@@ -43,4 +43,10 @@
 		return $return;
 	}
 
+	function relay($define, $filter) {
+		ob_start();
+			$filter();
+		define(strtoupper($define), ob_get_clean());
+	}
+
 ?>
