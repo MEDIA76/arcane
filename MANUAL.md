@@ -31,6 +31,14 @@ path('/example.css');
 path('/example/', true);
 ```
 
+> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
+
+```php
+relay('EXAMPLE', function() {
+	<p>Example</p>
+});
+```
+
 ### Pages
 
 > `define('TITLE', 'string')`: Sets page title. <nobr />  
