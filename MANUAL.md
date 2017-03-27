@@ -2,52 +2,52 @@
 
 ### Settings
 
-> `INDEX`: Sets defaulted page for directories. `/example/` = `/example/index.php`. <nobr />  
-> `LANGUAGE`: Sets defaulted locale for your site. *This must be set for automatic local switching.* <nobr />  
-> `LAYOUT`: Sets defaulted global layout for all your pages. *Page level defines overrule this.* <nobr />  
-> `404`: Sets defaulted 'page not found' landing page. *Disables closest page redirects.*
+> `INDEX`: Sets the default page for directories. `/example/` = `/example/index.php`. <nobr />  
+> `LANGUAGE`: Sets the default locale for site. *This must be set for automated local switching.* <nobr />  
+> `LAYOUT`: Sets the global layout for all pages. *Page level overrule global.* <nobr />  
+> `404`: Sets the default 'page not found' landing page. *Disables page redirects.*
 
 ### Functions
 
-> `scribe('string')`: Returns equivalent translation `string` from JSON file. Returns passed string if unset.
+> `scribe('string')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
 
 ``` php
-scribe('example');
+<?= scribe('example'); ?>
 ```
 
-> `path(integer)`: Returns requested path segment `string`. Returns `null` if unset.
+> `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset.
 
 ``` php
-path(2);
+<?php path(2); ?>
 ```
 
-> `path('/path/', boolean)`: Returns reconstructed url path `string`. Pass `true` parameter to use real path. *Does not localize passed strings with a file extension.*
+> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. *Does not localize paths with file extensions.*
 
 ``` php
-path('/example/');
+<?= path('/example/'); ?>
 
-path('/example.css');
+<?= path('/example.css'); ?>
 
-path('/example/', true);
+<?= path('/example/', true); ?>
 ```
 
 > `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
 
 ```php
-relay('EXAMPLE', function() {
+<?php relay('EXAMPLE', function() { ?>
 	<p>Example</p>
-});
+<?php }); ?>
 ```
 
 ### Pages
 
-> `define('TITLE', 'string')`: Sets page title. <nobr />  
+> `define('TITLE', 'string')`: Sets the page title. <nobr />  
 > `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
-> `define('LAYOUT', 'filename')`: Sets page layout. <nobr />  
+> `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
 > `define('ROUTE', array)`: Sets acceptable page routes.
 
 ``` php
-define('ROUTE', [
+<?php define('ROUTE', [
 	[
 		'path-one-example-one'
 	],
@@ -59,13 +59,13 @@ define('ROUTE', [
 		'path-one-example-three',
 		['path-two-example-three', 'path-two-example-three']
 	]
-]);
+]); ?>
 ```
 
 ### Layouts
 
-> `TITLE`: Returns page title. <nobr />  
-> `CONTENT`: Returns page content.
+> `TITLE`: Returns the page title. <nobr />  
+> `CONTENT`: Returns the page content.
 
 ``` html
 <html>
