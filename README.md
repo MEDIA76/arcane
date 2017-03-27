@@ -18,7 +18,7 @@ arcane/
 ├── pages/
 │   └── index.php
 ├── scripts/
-└── styles/
+├── styles/
 └── index.php
 ```
 
