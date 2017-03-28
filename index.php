@@ -3,7 +3,7 @@
 /**
 * Acrane Cast: A Simple & Intuitive PHP Structure
 * Copyright 2017 Joshua Britt
-* https://github.com/capachow/arcane/
+* https://github.com/capachow/arcane-cast/
 * Released under the MIT License
 **/
 

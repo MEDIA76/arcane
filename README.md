@@ -1,6 +1,6 @@
 # Arcane Cast
 
-Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple website developing and prototyping even faster by automating the features you want while making it easier to manage the ones you need.
+Arcane is unconventional, but beautifully intuitive. Arcane Cast aims to make simple website developing and prototyping even faster by automating the features you want while making it easier to manage the ones you need.
 
 ### Structure
 
