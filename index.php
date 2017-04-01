@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Acrane Cast: A Simple & Intuitive PHP Structure
+* Arcane PHP: A Simple & Intuitive Web Structure
 * Copyright 2017 Joshua Britt
-* https://github.com/capachow/arcane-cast/
+* https://github.com/capachow/arcane-php/
 * Released under the MIT License
 **/
 

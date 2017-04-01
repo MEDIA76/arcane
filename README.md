@@ -1,6 +1,6 @@
-# Arcane Cast
+# Arcane PHP
 
-Arcane is unconventional, but beautifully intuitive. Arcane Cast aims to make simple website developing and prototyping even faster by automating the features you want while making it easier to manage the ones you need.
+Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make simple website developing and prototyping even faster by automating the features you want while making it easier to manage the ones you need.
 
 ### Structure
 
@@ -26,8 +26,8 @@ arcane/
 
 - Requires Apache & PHP >= 7.0.0
 
-[Creating an issue](https://github.com/databute/databute/issues) on GitHub for reporting bugs is always appreciated.
+[Creating an issue](https://github.com/capachow/arcane-php/issues/) on GitHub for reporting bugs is always appreciated.
 
 ### License
 
-Copyright 2017 [Joshua Britt](https://github.com/capachow) under the [MIT](LICENSE.md).
+Copyright 2017 [Joshua Britt](https://github.com/capachow/) under the [MIT](LICENSE.md).
