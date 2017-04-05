@@ -13,8 +13,7 @@
 	define('SET', [
 		'INDEX' => 'index',
 		'LANGUAGE' => null,
-		'LAYOUT' => null,
-		'404' => null
+		'LAYOUT' => null
 	]);
 
 ?>

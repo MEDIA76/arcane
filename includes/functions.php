@@ -33,7 +33,7 @@
 			} else if(strpos($filter, '.css') && !empty(DIR['STYLES'])) {
 				$return .= DIR['STYLES'];
 			} else if(!$actual && defined('LANGUAGE') && !strpos($filter, '.')) {
-				$filter = LANGUAGE . '' . $filter;
+				$filter = LANGUAGE . '/' . $filter;
 			}
 			if(!strpos($filter, '.') && !strpos($filter, '?')) {
 				$filter .= '/';

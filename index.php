@@ -46,7 +46,7 @@ if(!defined('LANGUAGE') && !empty(SET['LANGUAGE']) && empty(SET['404'])) {
 
 do {
 	$page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
-	if(!is_file($page) && is_dir(rtrim($page, '.php') . '/')) {
+	if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
 		$page = rtrim(str_replace('.php', '', $page), '/');
 		$page = $page . '/' . SET['INDEX'] . '.php';
 	}
@@ -54,7 +54,7 @@ do {
 		ob_start();
 			require_once $page;
 			unset($page);
-		$content = ob_get_clean();
+		define('CONTENT', ob_get_clean());
 		if(defined('ROUTE')) {
 			$pseudo = array_diff_assoc(PATH, $path);
 			foreach(ROUTE as $route) {
@@ -87,29 +87,13 @@ do {
 
 ob_start('minify');
 	if(array_diff(PATH, $path)) {
-		if(!empty(SET['404'])) {
-			$page = path(DIR['PAGES'] . '/' . SET['404'] . '.php', true);
-		}
-		if(isset($page) && file_exists($page)) {
-			http_response_code(404);
-			if(!isset($content)) {
-				ob_start();
-					require_once $page;
-					unset($page);
-				$content = ob_get_clean();
-			}
-		} else {
-			header('Location: ' . path(implode('/', $path)));
-			exit;
-		}
-	}
-	unset($path);
-	if(defined('REDIRECT')) {
+		header('Location: ' . path(implode('/', $path)));
+		exit;
+	} else if(defined('REDIRECT')) {
 		header('Location: ' . path(REDIRECT));
 		exit;
 	} else {
-		define('CONTENT', $content);
-		unset($content);
+		unset($path);
 		if((defined('LAYOUT') && !empty(LAYOUT)) || !empty(SET['LAYOUT'])) {
 			$layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
 			$layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);

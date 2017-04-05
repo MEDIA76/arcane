@@ -2,6 +2,16 @@
 
 Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make simple website developing and prototyping even faster by automating the features you want while making it easier to manage the ones you need.
 
+### Highlights
+
+- Clean URL paths
+- Unique page routing
+- HTML minification
+- Clear file structure
+- Basic localization
+- Page layout templates
+- Native PHP code
+
 ### Structure
 
 ```
@@ -12,8 +22,9 @@ arcane/
 │   ├── functions.php
 │   └── settings.php
 ├── languages/
-│   └── en.json
+│   └── nl.json
 ├── layouts/
+│   ├── partials/
 │   └── defaut.php
 ├── pages/
 │   └── index.php
