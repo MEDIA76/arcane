@@ -3,8 +3,8 @@
 	define('DIR', [
 		'ROOT' => '/',
 		'IMAGES' => '/images/',
-		'LANGUAGES' => '/languages/',
 		'LAYOUTS' => '/layouts/',
+		'LOCALES' => '/locales/',
 		'PAGES' => '/pages/',
 		'SCRIPTS' => '/scripts/',
 		'STYLES' => '/styles/'
@@ -12,7 +12,7 @@
 
 	define('SET', [
 		'INDEX' => 'index',
-		'LANGUAGE' => null,
+		'LOCALE' => null,
 		'LAYOUT' => null
 	]);
 

@@ -21,11 +21,11 @@ arcane/
 │   ├── php.htaccess
 │   ├── functions.php
 │   └── settings.php
-├── languages/
-│   └── nl.json
 ├── layouts/
 │   ├── partials/
 │   └── defaut.php
+├── locales/
+│   └── nl.json
 ├── pages/
 │   └── index.php
 ├── scripts/

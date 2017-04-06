@@ -14,17 +14,17 @@ if(!file_exists('.htaccess') && file_exists('includes/php.htaccess')) {
 	copy('includes/php.htaccess', '.htaccess');
 }
 
-foreach(glob(trim(DIR['LANGUAGES'], '/') . '/*.json') as $transcript) {
-	$languages[basename($transcript, '.json')] = $transcript;
+foreach(glob(trim(DIR['LOCALES'], '/') . '/*.json') as $transcript) {
+	$locales[basename($transcript, '.json')] = $transcript;
 	unset($transcript);
 }
 
 $path = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));
 $path = array_filter(array_diff($path, explode('/', DIR['ROOT'])));
 if(!empty($path)) {
-	if(array_key_exists($path[1], $languages) || $path[1] == SET['LANGUAGE']) {
-		define('LANGUAGE', $path[1]);
-		define('TRANSCRIPT', json_decode(file_get_contents($languages[LANGUAGE]), true));
+	if(array_key_exists($path[1], $locales) || $path[1] == SET['LOCALE']) {
+		define('LOCALE', $path[1]);
+		define('TRANSCRIPT', json_decode(file_get_contents($locales[LOCALE]), true));
 		array_shift($path);
 	}
 	if(!empty($path)) {
@@ -33,15 +33,15 @@ if(!empty($path)) {
 }
 define('PATH', $path);
 
-if(!defined('LANGUAGE') && !empty(SET['LANGUAGE'])) {
+if(!defined('LOCALE') && !empty(SET['LOCALE'])) {
 	$request = explode(',', strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))[0];
-	if(!array_key_exists($request, $languages)) {
-		$request = SET['LANGUAGE'];
+	if(!array_key_exists($request, $locales)) {
+		$request = SET['LOCALE'];
 	}
 	header('Location: ' . path($request));
 	exit;
 } else {
-	unset($languages);
+	unset($locales);
 }
 
 do {

@@ -32,8 +32,8 @@
 				$return .= DIR['SCRIPTS'];
 			} else if(strpos($filter, '.css') && !empty(DIR['STYLES'])) {
 				$return .= DIR['STYLES'];
-			} else if(!$actual && defined('LANGUAGE') && !strpos($filter, '.')) {
-				$filter = LANGUAGE . '/' . $filter;
+			} else if(!$actual && defined('LOCALE') && !strpos($filter, '.')) {
+				$filter = LOCALE . '/' . $filter;
 			}
 			if(!strpos($filter, '.') && !strpos($filter, '?')) {
 				$filter .= '/';

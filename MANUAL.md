@@ -3,7 +3,7 @@
 ### Settings
 
 > `INDEX`: Sets the default page for directories. `/example/` = `/example/index.php`. <nobr />  
-> `LANGUAGE`: Sets the default locale for site. *This must be set for automated local switching.* <nobr />  
+> `LOCALE`: Sets the default locale for site. *This must be set for automated local switching.* <nobr />  
 > `LAYOUT`: Sets the global layout for all pages. *Page level overrule global.*
 
 ### Functions
