@@ -33,7 +33,7 @@ if(!empty($path)) {
 }
 define('PATH', $path);
 
-if(!defined('LANGUAGE') && !empty(SET['LANGUAGE']) && empty(SET['404'])) {
+if(!defined('LANGUAGE') && !empty(SET['LANGUAGE'])) {
 	$request = explode(',', strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))[0];
 	if(!array_key_exists($request, $languages)) {
 		$request = SET['LANGUAGE'];
