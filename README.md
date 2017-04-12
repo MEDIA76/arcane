@@ -8,7 +8,7 @@ Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make sim
 - Unique page routing
 - HTML minification
 - Clear file structure
-- Basic localization
+- Simple localization
 - Page layout templates
 - Native PHP code
 
@@ -25,7 +25,8 @@ arcane/
 │   ├── partials/
 │   └── defaut.php
 ├── locales/
-│   └── nl.json
+│   └── nl/
+│       └── nl-nl.json
 ├── pages/
 │   └── index.php
 ├── scripts/
