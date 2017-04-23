@@ -6,7 +6,7 @@
 	}
 
 	function scribe($filter) {
-		if(defined('TRANSCRIPT') && TRANSCRIPT[$filter]) {
+		if(defined('TRANSCRIPT') && @TRANSCRIPT[$filter]) {
 			$return = TRANSCRIPT[$filter];
 		} else {
 			$return = $filter;

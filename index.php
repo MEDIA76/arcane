@@ -54,7 +54,7 @@ unset($locales);
 $path = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));
 $path = array_filter(array_diff($path, explode('/', DIR['ROOT'])));
 if(!empty($path)) {
-	if(array_key_exists($path[2], LOCALES[$path[1]])) {
+	if(isset($path[2]) && array_key_exists($path[2], LOCALES[$path[1]])) {
 		$locale = LOCALES[$path[1]][$path[2]];
 		array_shift($path); array_shift($path);
 	} else if(array_key_exists(null, LOCALES[$path[1]])) {
