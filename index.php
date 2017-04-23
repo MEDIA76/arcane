@@ -14,6 +14,15 @@ if(!file_exists('.htaccess') && file_exists('includes/php.htaccess')) {
 	copy('includes/php.htaccess', '.htaccess');
 }
 
+if(DEV['ERRORS']) {
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+} else {
+	error_reporting(E_ALL & ~(E_NOTICE|E_DEPRECATED));
+	ini_set('display_errors', 0);
+}
+
+$locales = [];
 foreach(glob(trim(DIR['LOCALES'], '/') . '/*/*[-+]*.json') as $locale) {
 	$major = basename(dirname($locale));
 	$minor = trim(preg_replace('/' . $major . '/', '', basename($locale, '.json'), 1), '+-');
