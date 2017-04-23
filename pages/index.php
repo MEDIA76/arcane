@@ -5,4 +5,4 @@
 
 ?>
 
-<p><?= scribe('Hello, World!'); ?></p>
+<p>Hello, World!</p>

@@ -15,7 +15,9 @@
 	}
 
 	function path($filter, $actual = false) {
-		if(is_int($filter)) {
+		if(is_bool($filter)) {
+			$return = str_replace('//', '/', '/' . implode(@PATH, '/') . '/');
+		} else if(is_int($filter)) {
 			$return = @PATH[$filter];
 		} else {
 			if($actual) {
@@ -26,14 +28,14 @@
 				}
 				$return = DIR['ROOT'];
 			}
-			if(preg_match('/.jpg|.jpeg|.png|.gif|.svg/', $filter) && !empty(DIR['IMAGES'])) {
+			if(preg_match('/\.(jpe?g|.png|.gif|.svg)$/', $filter) && !empty(DIR['IMAGES'])) {
 				$return .= DIR['IMAGES'];
-			} else if(strpos($filter, '.js') && !empty(DIR['SCRIPTS'])) {
+			} else if(preg_match('/\.js$/', $filter) && !empty(DIR['SCRIPTS'])) {
 				$return .= DIR['SCRIPTS'];
-			} else if(strpos($filter, '.css') && !empty(DIR['STYLES'])) {
+			} else if(preg_match("/\.css$/", $filter) && !empty(DIR['STYLES'])) {
 				$return .= DIR['STYLES'];
-			} else if(!$actual && defined('LANGUAGE') && !strpos($filter, '.')) {
-				$filter = LANGUAGE . '/' . $filter;
+			} else if(!$actual && defined('LOCALE') && !strpos($filter, '.')) {
+				$filter = LOCALE['URL'] . '/' . $filter;
 			}
 			if(!strpos($filter, '.') && !strpos($filter, '?')) {
 				$filter .= '/';

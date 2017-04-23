@@ -2,9 +2,17 @@
 
 ### Settings
 
-> `INDEX`: Sets the default page for directories. `/example/` = `/example/index.php`. <nobr />  
-> `LANGUAGE`: Sets the default locale for site. *This must be set for automated local switching.* <nobr />  
-> `LAYOUT`: Sets the global layout for all pages. *Page level overrule global.*
+> `INDEX`: Sets the default page for directories.
+
+Define by `filename`: 'example'.
+
+> `LOCALE`: Sets the default locale for site. *This must be set for automated local switching.*
+
+Defined by `url`: '/exam/ple/' or '/example/'.
+
+> `LAYOUT`: Sets the global layout for all pages. *Page level overrules global.*
+
+Define by `filename`: 'example'.
 
 ### Functions
 
@@ -75,4 +83,27 @@
 		<main><?= CONTENT; ?></main>
 	</body>
 </html>
+```
+
+### Locales
+
+Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 alpha-2` (country/co).
+
+> `la-co.json`: Creates `/**/**/`. <nobr />  
+> `la+co.json`: Creates `/**/`.
+
+``` html
+locales/
+├── co/
+│   ├── la-co.json
+│   └── co.json
+└── la.json
+```
+
+``` html
+locales/
+├── la/
+│   ├── la-co.json
+│   └── la.json
+└── co.json
 ```
