@@ -10,6 +10,10 @@
 		'STYLES' => '/styles/'
 	]);
 
+	define('DEV', [
+		'ERRORS' => false
+	]);
+
 	define('SET', [
 		'INDEX' => 'index',
 		'LOCALE' => null,
