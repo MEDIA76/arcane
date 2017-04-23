@@ -73,11 +73,13 @@ if(defined('LOCALE')) {
 	unset($transcripts, $file);
 } else if(!empty(SET['LOCALE'])) {
 	preg_match_all('/[a-z]{2}-[a-z]{2}/', strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']), $request, PREG_PATTERN_ORDER);
-	foreach($request[0] as $locale) {
-		/*if() {
-			//header('Location: ' . path($request));
-			//exit;
-		}*/
+	foreach(reset($request) as $locale) {
+		foreach(LOCALES as $locales) {
+			if(in_array($locale, array_column($locales, 'CODE'))) {
+				header('Location: ' . path(reset($locales)['URL']));
+				exit;
+			}
+		}
 	}
 	header('Location: ' . path(SET['LOCALE']));
 	exit;

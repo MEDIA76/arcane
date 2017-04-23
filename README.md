@@ -14,7 +14,7 @@ Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make sim
 
 ### Structure
 
-```
+``` txt
 arcane/
 ├── images/
 ├── includes/
@@ -25,8 +25,6 @@ arcane/
 │   ├── partials/
 │   └── defaut.php
 ├── locales/
-│   └── nl/
-│       └── nl-nl.json
 ├── pages/
 │   └── index.php
 ├── scripts/
