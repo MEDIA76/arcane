@@ -20,14 +20,7 @@
 		} else if(is_int($filter)) {
 			$return = @PATH[$filter];
 		} else {
-			if($actual) {
-				$return = $_SERVER['DOCUMENT_ROOT'];
-			} else {
-				if(!strpos(DIR['ROOT'], '://')) {
-					$return = '/';
-				}
-				$return = DIR['ROOT'];
-			}
+			$return = $actual ? APP['DIR'] : APP['ROOT'];
 			if(preg_match('/\.(jpe?g|.png|.gif|.svg)$/', $filter) && !empty(DIR['IMAGES'])) {
 				$return .= DIR['IMAGES'];
 			} else if(preg_match('/\.js$/', $filter) && !empty(DIR['SCRIPTS'])) {

@@ -10,6 +10,12 @@
 require_once 'includes/settings.php';
 require_once 'includes/functions.php';
 
+define('APP', [
+	'DIR' => __DIR__,
+	'ROOT' => str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__ . '/'),
+	'URI' => $_SERVER['REQUEST_URI']
+]);
+
 if(!file_exists('.htaccess') && file_exists('includes/php.htaccess')) {
 	copy('includes/php.htaccess', '.htaccess');
 }
@@ -23,7 +29,7 @@ if(DEV['ERRORS']) {
 }
 
 $locales = [];
-foreach(glob(trim(DIR['LOCALES'], '/') . '/*/*[-+]*.json') as $locale) {
+foreach(glob(rtrim(path(DIR['LOCALES'], true), '/') . '/*/*[-+]*.json') as $locale) {
 	$major = basename(dirname($locale));
 	$minor = trim(preg_replace('/' . $major . '/', '', basename($locale, '.json'), 1), '+-');
 	$files = [
@@ -51,15 +57,18 @@ foreach(glob(trim(DIR['LOCALES'], '/') . '/*/*[-+]*.json') as $locale) {
 define('LOCALES', $locales);
 unset($locales);
 
-$path = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));
-$path = array_filter(array_diff($path, explode('/', DIR['ROOT'])));
+$path = explode('/', strtok(APP['URI'], '?'));
+$path = array_filter(array_diff($path, explode('/', APP['ROOT'])));
 if(!empty($path)) {
-	if(isset($path[2]) && array_key_exists($path[2], LOCALES[$path[1]])) {
-		$locale = LOCALES[$path[1]][$path[2]];
-		array_shift($path); array_shift($path);
-	} else if(array_key_exists(null, LOCALES[$path[1]])) {
-		$locale = LOCALES[$path[1]][null];
-		array_shift($path);
+	$path = array_combine(range(1, count($path)), $path);
+	if(array_key_exists($path[1], LOCALES)) {
+		if(isset($path[2]) && array_key_exists($path[2], LOCALES[$path[1]])) {
+			$locale = LOCALES[$path[1]][$path[2]];
+			array_shift($path); array_shift($path);
+		} else if(array_key_exists(null, LOCALES[$path[1]])) {
+			$locale = LOCALES[$path[1]][null];
+			array_shift($path);
+		}
 	}
 	if(isset($locale)) {
 		define('LOCALE', $locale);
@@ -74,7 +83,7 @@ define('PATH', $path);
 if(defined('LOCALE')) {
 	$transcripts = [];
 	foreach(LOCALE['FILES'] as $file) {
-		if(file_exists(path($file, true))) {
+		if(file_exists($file)) {
 			$transcripts = json_decode(file_get_contents($file), true) + $transcripts;
 		}
 	}

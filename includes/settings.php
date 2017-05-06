@@ -1,7 +1,6 @@
 <?php
 
 	define('DIR', [
-		'ROOT' => '/',
 		'IMAGES' => '/images/',
 		'LAYOUTS' => '/layouts/',
 		'LOCALES' => '/locales/',
