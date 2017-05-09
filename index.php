@@ -12,7 +12,7 @@ require_once 'includes/functions.php';
 
 define('APP', [
 	'DIR' => __DIR__,
-	'ROOT' => str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__ . '/'),
+	'ROOT' => substr(__DIR__ . '/', strlen(realpath($_SERVER['DOCUMENT_ROOT']))),
 	'URI' => $_SERVER['REQUEST_URI']
 ]);
 
