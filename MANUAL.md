@@ -42,7 +42,7 @@ Define by `filename`: 'example'.
 
 ```php
 <?php relay('EXAMPLE', function() { ?>
-	<p>Example</p>
+    <p>Example</p>
 <?php }); ?>
 ```
 
@@ -55,39 +55,37 @@ Define by `filename`: 'example'.
 
 ``` php
 <?php define('ROUTE', [
-	[
-		'path-one-example-one'
-	],
-	[
-		'path-one-example-two',
-		'path-two-example-two'
-	],
-	[
-		'path-one-example-three',
-		['path-two-example-three', 'path-two-example-three']
-	]
+    [
+        'path-one-example-one'
+    ],
+    [
+        'path-one-example-two',
+        'path-two-example-two'
+    ],
+    [
+        'path-one-example-three',
+        ['path-two-example-three', 'path-two-example-three']
+    ]
 ]); ?>
 ```
 
 ### Layouts
 
 > `TITLE`: Returns the page title. <nobr />  
-> `CONTENT`: Returns the page content.
+> `CONTENT`: Returns the page content. <nobr />  
 
 ``` html
 <html>
-	<head>
-		<title><?= TITLE; ?></title>
-	</head>
-	<body>
-		<main><?= CONTENT; ?></main>
-	</body>
+    <head>
+        <title><?= TITLE; ?></title>
+    </head>
+    <body>
+        <main><?= CONTENT; ?></main>
+    </body>
 </html>
 ```
 
 ### Locales
-
-Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 alpha-2` (country/co).
 
 > `la-co.json`: Creates `/**/**/`. <nobr />  
 > `la+co.json`: Creates `/**/`.
@@ -107,3 +105,5 @@ locales/
 │   └── la.json
 └── co.json
 ```
+
+Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co). Folders dictate locale priority and singular ISO files (la/co) are shared resources.
