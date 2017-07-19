@@ -1,6 +1,6 @@
 # Arcane PHP
 
-Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make simple website developing and prototyping even faster by automating the features you want while making it easier to manage the ones you need.
+Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make simple website developing/prototyping even faster by automating the features you want while making it easier to manage the ones you need, all with just one initial file.
 
 ### Highlights
 
@@ -12,23 +12,31 @@ Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make sim
 - Page layout templates
 - Native PHP code
 
-### Structure
+### Structure (Example)
 
 ``` txt
 arcane/
 ├── images/
-├── includes/
-│   ├── php.htaccess
-│   ├── functions.php
-│   └── settings.php
+│   └── logo.svg
 ├── layouts/
 │   ├── partials/
-│   └── defaut.php
+│   │   ├── footer.php
+│   │   └── header.php
+│   └── default.php
 ├── locales/
+│   ├── gb/
+│   │   └── en+gb.json
+│   ├── us/
+│   │   ├── es-us.json
+│   │   ├── en+us.json
+│   │   └── us.json
+│   └── en.json
 ├── pages/
 │   └── index.php
 ├── scripts/
+│   └── selectors.css
 ├── styles/
+│   └── functions.js
 └── index.php
 ```
 
