@@ -1,18 +1,18 @@
-# Arcane PHP
+# Arcane
 
-Arcane is unconventional, but beautifully intuitive. Arcane PHP aims to make simple website developing/prototyping even faster by automating the features you want while making it easier to manage the ones you need, all with just one initial file.
+Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple website developing or prototyping even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file.
 
 ### Highlights
 
-- Clean URL paths
-- Unique page routing
-- HTML minification
-- Clear file structure
-- Simple localization
-- Page layout templates
-- Native PHP code
+- Clean URL Paths
+- Unique Page Routing
+- HTML Minification
+- Clear File Structure
+- Simple Localization
+- Page Layout Templates
+- Native PHP Code
 
-### Structure (Example)
+### Structure Example
 
 ``` txt
 arcane/
@@ -43,8 +43,9 @@ arcane/
 ### Support
 
 - Requires Apache & PHP >= 7.0.0
+- [Documentation](MANUAL.md)
 
-[Creating an issue](https://github.com/capachow/arcane-php/issues/) on GitHub for reporting bugs is always appreciated.
+[Creating an issue](https://github.com/capachow/arcane/issues/) on GitHub for reporting bugs is always appreciated.
 
 ### License
 

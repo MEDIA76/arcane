@@ -1,11 +1,13 @@
 <?php
 
 /**
-* Arcane PHP: A Simple & Intuitive Web Structure
-* Copyright 2017 Joshua Britt
-* https://github.com/capachow/arcane-php/
-* Released under the MIT License
+ * Arcane: A Simple & Intuitive Web Architecture
+ * Copyright 2017 Joshua Britt
+ * https://github.com/capachow/arcane/
+ * Released under the MIT License
 **/
+
+/* App Settings */
 
 define('DIR', [
     'IMAGES' => '/images/',
@@ -17,7 +19,8 @@ define('DIR', [
 ]);
 
 define('DEV', [
-    'ERRORS' => false
+    'ERRORS' => false,
+    'MINIFY' => true
 ]);
 
 define('SET', [
@@ -26,19 +29,7 @@ define('SET', [
     'LAYOUT' => null
 ]);
 
-function minify($filter) {
-    $return = str_replace(["\r\n", "\r", "\n", "\t", '  '], '', $filter);
-    return $return;
-}
-
-function scribe($filter) {
-    if(defined('TRANSCRIPT') && @TRANSCRIPT[$filter]) {
-        $return = TRANSCRIPT[$filter];
-    } else {
-        $return = $filter;
-    }
-    return $return;
-}
+/* App Functions */
 
 function path($filter, $actual = false) {
     if(is_bool($filter)) {
@@ -70,11 +61,24 @@ function relay($define, $filter) {
     define(strtoupper($define), ob_get_clean());
 }
 
+function scribe($filter) {
+    if(defined('TRANSCRIPT') && @TRANSCRIPT[$filter]) {
+        $return = TRANSCRIPT[$filter];
+    } else {
+        $return = $filter;
+    }
+    return $return;
+}
+
+/* App Information */
+
 define('APP', [
     'DIR' => __DIR__,
     'ROOT' => substr(__DIR__ . '/', strlen(realpath($_SERVER['DOCUMENT_ROOT']))),
     'URI' => $_SERVER['REQUEST_URI']
 ]);
+
+/* Create Rewrite File */
 
 if(!file_exists('.htaccess')) {
     $htaccess = <<<HTACCESS
@@ -91,6 +95,8 @@ HTACCESS;
     file_put_contents('.htaccess', $htaccess, LOCK_EX);
 }
 
+/* Create Directories */
+
 foreach(DIR as $directory) {
     $directory = ltrim($directory, '/');
     if(!is_dir($directory) && !empty($directory)) {
@@ -99,6 +105,8 @@ foreach(DIR as $directory) {
     unset($directory);
 }
 
+/* Development Errors */
+
 if(DEV['ERRORS']) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
@@ -106,6 +114,8 @@ if(DEV['ERRORS']) {
     error_reporting(E_ALL & ~(E_NOTICE|E_DEPRECATED));
     ini_set('display_errors', 0);
 }
+
+/* Generate and Define Locales */
 
 $locales = [];
 foreach(glob(rtrim(path(DIR['LOCALES'], true), '/') . '/*/*[-+]*.json') as $locale) {
@@ -136,6 +146,8 @@ foreach(glob(rtrim(path(DIR['LOCALES'], true), '/') . '/*/*[-+]*.json') as $loca
 define('LOCALES', $locales);
 unset($locales);
 
+/* Define Path and Locale from URL */
+
 $path = explode('/', strtok(APP['URI'], '?'));
 $path = array_filter(array_diff($path, explode('/', APP['ROOT'])));
 if(!empty($path)) {
@@ -159,6 +171,8 @@ if(!empty($path)) {
 }
 define('PATH', $path);
 
+/* Load Locale or Locale Redirect */
+
 if(defined('LOCALE')) {
     $transcripts = [];
     foreach(LOCALE['FILES'] as $file) {
@@ -181,6 +195,8 @@ if(defined('LOCALE')) {
     header('Location: ' . path(SET['LOCALE']));
     exit;
 }
+
+/* Define Page and Evaluate Routes */
 
 do {
     $page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
@@ -223,7 +239,16 @@ do {
     array_pop($path);
 } while(true);
 
-ob_start('minify');
+/* Minify and Build Page */
+
+ob_start(function($filter) {
+    if(DEV['MINIFY']) {
+        $return = str_replace(["\r\n", "\r", "\n", "\t", '  '], '', $filter);
+        return $return;
+    } else {
+        return $filter;
+    }
+});
     if(array_diff(PATH, $path)) {
         header('Location: ' . path(implode('/', $path)));
         exit;
