@@ -42,7 +42,7 @@ Define by `filename`: 'example'.
 
 ```php
 <?php relay('EXAMPLE', function() { ?>
-    <p>Example</p>
+  <p>Example</p>
 <?php }); ?>
 ```
 
@@ -55,17 +55,17 @@ Define by `filename`: 'example'.
 
 ``` php
 <?php define('ROUTE', [
-    [
-        'path-one-example-one'
-    ],
-    [
-        'path-one-example-two',
-        'path-two-example-two'
-    ],
-    [
-        'path-one-example-three',
-        ['path-two-example-three', 'path-two-example-three']
-    ]
+  [
+    'path-one-example-one'
+  ],
+  [
+    'path-one-example-two',
+    'path-two-example-two'
+  ],
+  [
+    'path-one-example-three',
+    ['path-two-example-three', 'path-two-example-three']
+  ]
 ]); ?>
 ```
 
@@ -76,12 +76,12 @@ Define by `filename`: 'example'.
 
 ``` html
 <html>
-    <head>
-        <title><?= TITLE; ?></title>
-    </head>
-    <body>
-        <main><?= CONTENT; ?></main>
-    </body>
+  <head>
+    <title><?= TITLE; ?></title>
+  </head>
+  <body>
+    <main><?= CONTENT; ?></main>
+  </body>
 </html>
 ```
 
