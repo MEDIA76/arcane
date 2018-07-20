@@ -13,9 +13,9 @@ define('DIR', [
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
   'LOCALES' => '/locales/',
-  'PAGES' => '/pages/',
   'SCRIPTS' => '/scripts/',
-  'STYLES' => '/styles/'
+  'STYLES' => '/styles/',
+  'VIEWS' => '/views/'
 ]);
 
 define('DEV', [
@@ -228,21 +228,21 @@ if(defined('LOCALE')) {
   exit;
 }
 
-/* Define Page and Evaluate Routes */
+/* Define View and Evaluate Routes */
 
 do {
-  $page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
+  $view = path(DIR['VIEWS'] . '/' . implode('/', $path) . '.php', true);
 
-  if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
-    $page = rtrim(str_replace('.php', '', $page), '/');
-    $page = $page . '/' . SET['INDEX'] . '.php';
+  if(!is_file($view) && is_dir(substr($view, 0, -4) . '/')) {
+    $view = rtrim(str_replace('.php', '', $view), '/');
+    $view = $view . '/' . SET['INDEX'] . '.php';
   }
 
-  if(is_file($page)) {
+  if(is_file($view)) {
     ob_start();
-      require_once $page;
+      require_once $view;
 
-      unset($page);
+      unset($view);
     define('CONTENT', ob_get_clean());
 
     if(defined('ROUTE')) {
@@ -281,7 +281,7 @@ do {
   array_pop($path);
 } while(true);
 
-/* Minify and Build Page */
+/* Minify and Build View */
 
 ob_start(function($filter) {
   if(DEV['MINIFY']) {
