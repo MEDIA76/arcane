@@ -2,25 +2,27 @@
 
 ### Settings
 
-> `INDEX`: Sets the default page for directories.
+> `ERRORS`: Toggles the display of PHP errors.
+
+Define by `boolean`: false.
+
+> `INDEX`: Sets the default view for directories.
+
+Define by `filename`: 'example'.
+
+> `LAYOUT`: Sets the global layout for all views. *View level overrules global.*
 
 Define by `filename`: 'example'.
 
 > `LOCALE`: Sets the default locale for site. *This must be set for automated local switching.*
 
-Defined by `url`: '/exam/ple/' or '/example/'.
+Defined by `url`: '/example/' or '/exam/ple/'.
 
-> `LAYOUT`: Sets the global layout for all pages. *Page level overrules global.*
+> `MINIFY`: Toggles the minification of source code.
 
-Define by `filename`: 'example'.
+Define by `boolean`: true.
 
 ### Functions
-
-> `scribe('string')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
-
-``` php
-<?= scribe('example'); ?>
-```
 
 > `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset.
 
@@ -38,7 +40,7 @@ Define by `filename`: 'example'.
 <?= path('/example/', true); ?>
 ```
 
-> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
+> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout views.
 
 ```php
 <?php relay('EXAMPLE', function() { ?>
@@ -46,41 +48,20 @@ Define by `filename`: 'example'.
 <?php }); ?>
 ```
 
-### Pages
-
-> `define('TITLE', 'string')`: Sets the page title. <nobr />  
-> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
-> `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
-> `define('ROUTE', array)`: Sets acceptable page routes.
+> `scribe('string')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
 
 ``` php
-<?php define('ROUTE', [
-  [
-    'path-one-example-one'
-  ],
-  [
-    'path-one-example-two',
-    'path-two-example-two'
-  ],
-  [
-    'path-one-example-three',
-    ['path-two-example-three', 'path-two-example-three']
-  ]
-]); ?>
+<?= scribe('example'); ?>
 ```
 
 ### Layouts
 
-> `TITLE`: Returns the page title. <nobr />  
-> `CONTENT`: Returns the page content. <nobr />  
+> `CONTENT`: Returns the view content. <nobr />  
 
 ``` html
 <html>
-  <head>
-    <title><?= TITLE; ?></title>
-  </head>
   <body>
-    <main><?= CONTENT; ?></main>
+    <?= CONTENT; ?>
   </body>
 </html>
 ```
@@ -107,3 +88,25 @@ locales/
 ```
 
 Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co). Folders dictate locale priority and singular ISO files (la/co) are shared resources.
+
+### Views
+
+> `define('REDIRECT', '/path/')`: Redirects view. <nobr />  
+> `define('LAYOUT', 'filename')`: Sets the view layout. <nobr />  
+> `define('ROUTE', array)`: Sets acceptable view routes.
+
+``` php
+<?php define('ROUTE', [
+  [
+    'path-one-example-one'
+  ],
+  [
+    'path-one-example-two',
+    'path-two-example-two'
+  ],
+  [
+    'path-one-example-three',
+    ['path-two-example-three', 'path-two-example-three']
+  ]
+]); ?>
+```
