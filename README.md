@@ -55,4 +55,4 @@ arcane/
 
 ### License
 
-Copyright 2017 [Joshua Britt](https://github.com/capachow/) under the [MIT](LICENSE.md).
+Copyright 2017-2018 [Joshua Britt](https://github.com/capachow/) under the [MIT](LICENSE.md).
