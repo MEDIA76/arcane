@@ -1,15 +1,15 @@
 # Arcane
 
-Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple website developing or prototyping even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file.
+Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple web developing or prototyping even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file (~8KB).
 
 ### Highlights
 
 - Clean URL Paths
-- Unique Page Routing
+- Unique Routing
 - HTML Minification
 - Clear File Structure
 - Simple Localization
-- Page Layout Templates
+- Layout Templates
 - Native PHP Code
 
 ### Structure Example
@@ -24,19 +24,25 @@ arcane/
 │   │   └── header.php
 │   └── default.php
 ├── locales/
-│   ├── gb/
-│   │   └── en+gb.json
-│   ├── us/
-│   │   ├── es-us.json
+│   ├── es/
+│   │   └── es+us.json
+│   ├── en/
+│   │   ├── en-gb.json
 │   │   ├── en+us.json
-│   │   └── us.json
-│   └── en.json
-├── pages/
-│   └── index.php
+│   │   └── en.json
+│   └── us.json
 ├── scripts/
 │   └── selectors.css
 ├── styles/
 │   └── functions.js
+├── views/
+│   ├── about.php
+│   ├── blog/
+│   │   ├── entry.php
+│   │   └── index.php
+│   ├── contact.php
+│   ├── index.php
+│   └── services.php
 └── index.php
 ```
 
@@ -49,4 +55,4 @@ arcane/
 
 ### License
 
-Copyright 2017 [Joshua Britt](https://github.com/capachow/) under the [MIT](LICENSE.md).
+Copyright 2017-2018 [Joshua Britt](https://github.com/capachow/) under the [MIT](LICENSE.md).
