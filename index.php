@@ -120,6 +120,18 @@ function scribe($filter) {
 
     if(!is_dir($path) && !empty($path)) {
       mkdir($path);
+
+      if($directory === 'VIEWS') {
+        $html = implode("\n", [
+          '<html>',
+          '  <body>',
+          '    <h1>Hello, world!</h1>',
+          '  </body>',
+          '</html>'
+        ]);
+
+        file_put_contents($path . SET['INDEX'] . '.php', $html);
+      }
     }
   }
 })();
