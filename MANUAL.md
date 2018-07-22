@@ -27,7 +27,7 @@ Define by `boolean`: true.
 > `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset.
 
 ``` php
-<?php path(2); ?>
+<?= path(2); ?>
 ```
 
 > `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. *Does not localize paths with file extensions.*
