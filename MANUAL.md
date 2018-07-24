@@ -6,11 +6,11 @@
 
 Define by `boolean`: false.
 
-> `INDEX`: Sets the default view for directories.
+> `INDEX`: Sets the default page for directories.
 
 Define by `filename`: 'example'.
 
-> `LAYOUT`: Sets the global layout for all views. *View level overrules global.*
+> `LAYOUT`: Sets the global layout for all pages. *Page level overrules global.*
 
 Define by `filename`: 'example'.
 
@@ -40,7 +40,7 @@ Define by `boolean`: true.
 <?= path('/example/', true); ?>
 ```
 
-> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout views.
+> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
 
 ```php
 <?php relay('EXAMPLE', function() { ?>
@@ -56,7 +56,7 @@ Define by `boolean`: true.
 
 ### Layouts
 
-> `CONTENT`: Returns the view content. <nobr />  
+> `CONTENT`: Returns the page content. <nobr />  
 
 ``` html
 <html>
@@ -89,11 +89,11 @@ locales/
 
 Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co). Folders dictate locale priority and singular ISO files (la/co) are shared resources.
 
-### Views
+### Pages
 
-> `define('REDIRECT', '/path/')`: Redirects view. <nobr />  
-> `define('LAYOUT', 'filename')`: Sets the view layout. <nobr />  
-> `define('ROUTE', array)`: Sets acceptable view routes.
+> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
+> `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
+> `define('ROUTE', array)`: Sets acceptable page routes.
 
 ``` php
 <?php define('ROUTE', [

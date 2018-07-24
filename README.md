@@ -31,11 +31,7 @@ arcane/
 │   │   ├── en+us.json
 │   │   └── en.json
 │   └── us.json
-├── scripts/
-│   └── selectors.css
-├── styles/
-│   └── functions.js
-├── views/
+├── pages/
 │   ├── about.php
 │   ├── blog/
 │   │   ├── entry.php
@@ -43,6 +39,10 @@ arcane/
 │   ├── contact.php
 │   ├── index.php
 │   └── services.php
+├── scripts/
+│   └── functions.js
+├── styles/
+│   └── selectors.css
 └── index.php
 ```
 

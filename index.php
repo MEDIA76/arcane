@@ -13,9 +13,9 @@ define('DIR', [
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
   'LOCALES' => '/locales/',
+  'PAGES' => '/pages/',
   'SCRIPTS' => '/scripts/',
-  'STYLES' => '/styles/',
-  'VIEWS' => '/views/'
+  'STYLES' => '/styles/'
 ]);
 
 define('SET', [
@@ -121,7 +121,7 @@ function scribe($filter) {
     if(!is_dir($path) && !empty($path)) {
       mkdir($path);
 
-      if($directory === 'VIEWS') {
+      if($directory === 'PAGES') {
         $html = implode("\n", [
           '<html>',
           '  <body>',
@@ -269,21 +269,21 @@ function scribe($filter) {
   }
 
   do {
-    $view = path(DIR['VIEWS'] . '/' . implode('/', $path) . '.php', true);
+    $page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
 
-    if(!is_file($view) && is_dir(substr($view, 0, -4) . '/')) {
-      $view = rtrim(str_replace('.php', '', $view), '/');
-      $view = $view . '/' . SET['INDEX'] . '.php';
+    if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
+      $page = rtrim(str_replace('.php', '', $page), '/');
+      $page = $page . '/' . SET['INDEX'] . '.php';
     }
 
-    if(is_file($view)) {
+    if(is_file($page)) {
       ob_start();
         define('REALPATH', $path);
-        define('VIEWFILE', $view);
+        define('PAGEFILE', $page);
 
-        unset($path, $view);
+        unset($path, $page);
 
-        require_once VIEWFILE;
+        require_once PAGEFILE;
 
         $path = REALPATH;
       define('CONTENT', ob_get_clean());
@@ -325,7 +325,7 @@ function scribe($filter) {
   define('PATH', $path);
 })();
 
-/* Redirect or Render View */
+/* Redirect or Render Page */
 
 (function() {
   ob_start(function($filter) {
