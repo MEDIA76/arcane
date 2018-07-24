@@ -119,7 +119,7 @@ function scribe($filter) {
     $path = trim($path, '/') . '/';
 
     if(!is_dir($path) && !empty($path)) {
-      mkdir($path);
+      mkdir($path, 0777, true);
 
       if($directory === 'PAGES') {
         $html = implode("\n", [
