@@ -28,34 +28,32 @@ define('SET', [
 
 /* Application Functions */
 
-function path($filter, $actual = false) {
-  if(is_bool($filter)) {
+function path($filter = null, $actual = false) {
+  if(is_null($filter)) {
     $return = str_replace('//', '/', '/' . implode(@URI, '/') . '/');
   } else if(is_int($filter)) {
     $return = @URI[$filter];
   } else {
     $return = $actual ? APP['DIR'] : APP['ROOT'];
 
-    if(preg_match('/\.(jpe?g|.png|.gif|.svg)$/', $filter)) {
-      if(!empty(DIR['IMAGES'])) {
-        $return .= DIR['IMAGES'];
-      }
-    } else if(preg_match('/\.js$/', $filter)) {
-      if(!empty(DIR['SCRIPTS'])) {
-        $return .= DIR['SCRIPTS'];
-      }
-    } else if(preg_match("/\.css$/", $filter)) {
-      if(!empty(DIR['STYLES'])) {
-        $return .= DIR['STYLES'];
-      }
-    } else if(!$actual && !strpos($filter, '.')) {
-      if(defined('LOCALE')) {
-        $filter = LOCALE['URI'] . '/' . $filter;
+    if(is_array($filter)) {
+      list($define, $filter) = $filter;
+
+      $define = DIR[strtoupper($define)];
+
+      if(isset($define) && !empty($define)) {
+        $return .= $define;
       }
     }
 
-    if(!strpos($filter, '.') && !strpos($filter, '?')) {
-      $filter .= '/';
+    if(!strpos($filter, '.')) {
+      if(defined('LOCALE') && !$actual) {
+        $filter = LOCALE['URI'] . '/' . $filter;
+      }
+
+      if(!strpos($filter, '?')) {
+        $filter .= '/';
+      }
     }
 
     $return = $return . '/' . $filter;
