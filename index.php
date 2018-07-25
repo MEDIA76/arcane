@@ -13,9 +13,9 @@ define('DIR', [
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
   'LOCALES' => '/locales/',
+  'PAGES' => '/pages/',
   'SCRIPTS' => '/scripts/',
-  'STYLES' => '/styles/',
-  'VIEWS' => '/views/'
+  'STYLES' => '/styles/'
 ]);
 
 define('SET', [
@@ -28,34 +28,32 @@ define('SET', [
 
 /* Application Functions */
 
-function path($filter, $actual = false) {
-  if(is_bool($filter)) {
+function path($filter = null, $actual = false) {
+  if(is_null($filter)) {
     $return = str_replace('//', '/', '/' . implode(@URI, '/') . '/');
   } else if(is_int($filter)) {
     $return = @URI[$filter];
   } else {
     $return = $actual ? APP['DIR'] : APP['ROOT'];
 
-    if(preg_match('/\.(jpe?g|.png|.gif|.svg)$/', $filter)) {
-      if(!empty(DIR['IMAGES'])) {
-        $return .= DIR['IMAGES'];
-      }
-    } else if(preg_match('/\.js$/', $filter)) {
-      if(!empty(DIR['SCRIPTS'])) {
-        $return .= DIR['SCRIPTS'];
-      }
-    } else if(preg_match("/\.css$/", $filter)) {
-      if(!empty(DIR['STYLES'])) {
-        $return .= DIR['STYLES'];
-      }
-    } else if(!$actual && !strpos($filter, '.')) {
-      if(defined('LOCALE')) {
-        $filter = LOCALE['URI'] . '/' . $filter;
+    if(is_array($filter)) {
+      list($define, $filter) = $filter;
+
+      $define = DIR[strtoupper($define)];
+
+      if(isset($define) && !empty($define)) {
+        $return .= $define;
       }
     }
 
-    if(!strpos($filter, '.') && !strpos($filter, '?')) {
-      $filter .= '/';
+    if(!strpos($filter, '.')) {
+      if(defined('LOCALE') && !$actual) {
+        $filter = LOCALE['URI'] . '/' . $filter;
+      }
+
+      if(!strpos($filter, '?')) {
+        $filter .= '/';
+      }
     }
 
     $return = $return . '/' . $filter;
@@ -119,9 +117,9 @@ function scribe($filter) {
     $path = trim($path, '/') . '/';
 
     if(!is_dir($path) && !empty($path)) {
-      mkdir($path);
+      mkdir($path, 0777, true);
 
-      if($directory === 'VIEWS') {
+      if($directory === 'PAGES') {
         $html = implode("\n", [
           '<html>',
           '  <body>',
@@ -269,21 +267,21 @@ function scribe($filter) {
   }
 
   do {
-    $view = path(DIR['VIEWS'] . '/' . implode('/', $path) . '.php', true);
+    $page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
 
-    if(!is_file($view) && is_dir(substr($view, 0, -4) . '/')) {
-      $view = rtrim(str_replace('.php', '', $view), '/');
-      $view = $view . '/' . SET['INDEX'] . '.php';
+    if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
+      $page = rtrim(str_replace('.php', '', $page), '/');
+      $page = $page . '/' . SET['INDEX'] . '.php';
     }
 
-    if(is_file($view)) {
+    if(is_file($page)) {
       ob_start();
         define('REALPATH', $path);
-        define('VIEWFILE', $view);
+        define('PAGEFILE', $page);
 
-        unset($path, $view);
+        unset($path, $page);
 
-        require_once VIEWFILE;
+        require_once PAGEFILE;
 
         $path = REALPATH;
       define('CONTENT', ob_get_clean());
@@ -325,7 +323,7 @@ function scribe($filter) {
   define('PATH', $path);
 })();
 
-/* Redirect or Render View */
+/* Redirect or Render Page */
 
 (function() {
   ob_start(function($filter) {
