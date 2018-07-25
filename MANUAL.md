@@ -2,56 +2,52 @@
 
 ### Settings
 
-> `ERRORS`: Toggles the display of PHP errors.
-
-Define by `boolean`: false.
-
-> `INDEX`: Sets the default page for directories.
-
-Define by `filename`: 'example'.
-
-> `LAYOUT`: Sets the global layout for all pages. *Page level overrules global.*
-
-Define by `filename`: 'example'.
-
-> `LOCALE`: Sets the default locale for site. *This must be set for automated local switching.*
-
-Defined by `url`: '/example/' or '/exam/ple/'.
-
-> `MINIFY`: Toggles the minification of source code.
-
-Define by `boolean`: true.
+> `'ERRORS' => boolean`: Toggles the display of PHP errors. <nobr />  
+> `'INDEX' => 'filename'`: Sets the default page for directories. <nobr />  
+> `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
+> `'LOCALE' => '/path/'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
+> `'MINIFY' => boolean`: Toggles the minification of source code.
 
 ### Functions
 
-> `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset.
+###### `Path`
+
+> `path(null)`: Returns the current url path `string`. <nobr />  
+> `path(['constant', '/path/'])`: Returns the reconstructed url path `string` under assigned DIR `constant`. <nobr />  
+> `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset. <nobr />  
+> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path.
 
 ``` php
+<?= path(); ?>
+
+<?= path(['IMAGES', '/logo.svg']); ?>
+
 <?= path(2); ?>
+
+<?= path('/about/'); ?>
+
+<?= path('/styles/selectors.css', true); ?>
 ```
 
-> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. *Does not localize paths with file extensions.*
+- Does not localize paths with file extensions.
 
-``` php
-<?= path('/example/'); ?>
-
-<?= path('/example.css'); ?>
-
-<?= path('/example/', true); ?>
-```
+###### `Relay`
 
 > `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
 
 ```php
-<?php relay('EXAMPLE', function() { ?>
-  <p>Example</p>
+<?php relay('SIDEBAR', function() { ?>
+  <h2>Heading</h2>
+  <p>Paragraph</p>
 <?php }); ?>
 ```
 
-> `scribe('string')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
+###### `Scribe`
+
+> `scribe('text')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
 
 ``` php
-<?= scribe('example'); ?>
+<?= scribe('Welcome'); ?>
 ```
 
 ### Layouts
@@ -77,9 +73,7 @@ locales/
 │   ├── la-co.json
 │   └── co.json
 └── la.json
-```
 
-``` html
 locales/
 ├── la/
 │   ├── la-co.json
@@ -87,26 +81,25 @@ locales/
 └── co.json
 ```
 
-Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co). Folders dictate locale priority and singular ISO files (la/co) are shared resources.
+- Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co).
+- Folders dictate locale priority and singular ISO files (la/co) are shared resources.
 
 ### Pages
 
 > `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
-> `define('ROUTE', array)`: Sets acceptable page routes.
+> `define('ROUTE', [array])`: Sets acceptable page routes.
 
 ``` php
 <?php define('ROUTE', [
-  [
-    'path-one-example-one'
-  ],
-  [
-    'path-one-example-two',
-    'path-two-example-two'
-  ],
-  [
-    'path-one-example-three',
-    ['path-two-example-three', 'path-two-example-three']
-  ]
+  ['news'],
+  ['news', 'history']
+]); ?>
+
+<?php define('ROUTE', [
+  ['post', array_keys($posts)]
 ]); ?>
 ```
+
+- Within the `/about/` page, the `/about/news/` or `/about/news/history/` routes are allowed.
+- Within the `/blog/` page, the `/post/*/` route is allowed (`*` equals a key within the `$posts` array).
