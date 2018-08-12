@@ -142,12 +142,8 @@ function scribe($filter) {
 
   foreach(glob($files . '/*/*[-+]*.json') as $locale) {
     $filename = basename($locale, '.json');
-
-    list($major, $minor) = [
-      basename(dirname($locale)),
-      trim(preg_replace('/' . $major . '/', '', $filename, 1), '+-')
-    ];
-
+    $major = basename(dirname($locale));
+    $minor = trim($filename, $major . '+-');
     $uri = '/' . $major . '/';
     $files = [
       trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
