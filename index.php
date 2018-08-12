@@ -157,7 +157,7 @@ function scribe($filter) {
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
       $filename = basename($locale, '.json');
       $major = basename(dirname($locale));
-      $minor = trim($filename, $major . '+-');
+      $minor = trim(preg_replace('/' . $major . '/', '', $filename, 1), '+-');
       $uri = '/' . $major . '/';
       $transcript = [];
 
