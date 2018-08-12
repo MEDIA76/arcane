@@ -142,43 +142,59 @@ function scribe($filter) {
 /* Define LOCALES */
 
 (function() {
-  $files = rtrim(path(DIR['LOCALES'], true), '/');
+  $directory = rtrim(path(DIR['LOCALES'], true), '/');
   $locales = [];
 
-  foreach(glob($files . '/*/*[-+]*.json') as $locale) {
-    $filename = basename($locale, '.json');
-    $major = basename(dirname($locale));
-    $minor = trim($filename, $major . '+-');
-    $uri = '/' . $major . '/';
-    $files = [
-      trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
-      dirname($locale) . '/' . $major . '.json',
-      $locale
-    ];
+  if(defined('CACHE')) {
+    $cache = sprintf(CACHE, crc32('LOCALES'), fileatime($directory));
 
-    switch(substr($filename, 3)) {
-      case $major:
-        list($language, $country) = [$minor, $major];
-      break;
+    if(file_exists($cache)) {
+      $locales = unserialize(file_get_contents($cache));
+    }
+  }
 
-      case $minor:
-        list($language, $country) = [$major, $minor];
-      break;
+  if(empty($locales)) {
+    foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
+      $filename = basename($locale, '.json');
+      $major = basename(dirname($locale));
+      $minor = trim($filename, $major . '+-');
+      $uri = '/' . $major . '/';
+      $files = [
+        trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
+        dirname($locale) . '/' . $major . '.json',
+        $locale
+      ];
+
+      switch(substr($filename, 3)) {
+        case $major:
+          list($language, $country) = [$minor, $major];
+        break;
+
+        case $minor:
+          list($language, $country) = [$major, $minor];
+        break;
+      }
+
+      if(strpos($locale, '+')) {
+        $minor = null;
+      } else {
+        $uri .= $minor . '/';
+      }
+
+      $locales[$major][$minor] = [
+        'CODE' => $language . '-' . $country,
+        'COUNTRY' => $country,
+        'FILES' => $files,
+        'LANGUAGE' => $language,
+        'URI' => $uri,
+      ];
     }
 
-    if(strpos($locale, '+')) {
-      $minor = null;
-    } else {
-      $uri .= $minor . '/';
-    }
+    if(defined('CACHE')) {
+      array_map('unlink', glob(strtok($cache, '.') . '.*.php'));
 
-    $locales[$major][$minor] = [
-      'CODE' => $language . '-' . $country,
-      'COUNTRY' => $country,
-      'FILES' => $files,
-      'LANGUAGE' => $language,
-      'URI' => $uri,
-    ];
+      file_put_contents($cache, serialize($locales));
+    }
   }
 
   define('LOCALES', $locales);
