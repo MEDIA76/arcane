@@ -342,7 +342,7 @@ function scribe($filter) {
   ob_start(function($filter) {
     if(SET['MINIFY']) {
       $return = str_replace([
-        "\r\n", "\r", "\n", "\t", '  '
+        "\r\n", "\r", "\n", "\t"
       ], '', $filter);
 
       return $return;
