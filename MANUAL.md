@@ -5,7 +5,7 @@
 > `'ERRORS' => boolean`: Toggles the display of PHP errors. <nobr />  
 > `'INDEX' => 'filename'`: Sets the default page for directories. <nobr />  
 > `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
-> `'LOCALE' => '/path/'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
+> `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
 > `'MINIFY' => boolean`: Toggles the minification of source code.
 
 ### Functions
