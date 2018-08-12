@@ -7,8 +7,6 @@
  * Released under the MIT License
 **/
 
-/* Application Settings */
-
 define('DIR', [
   'CACHES' => '/caches/',
   'IMAGES' => '/images/',
@@ -26,8 +24,6 @@ define('SET', [
   'LOCALE' => null,
   'MINIFY' => true
 ]);
-
-/* Application Functions */
 
 function path($filter = null, $actual = false) {
   if(is_null($filter)) {
@@ -80,8 +76,6 @@ function scribe($filter) {
   return $return;
 }
 
-/* Application Constants */
-
 (function() {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
   define('APP', [
@@ -89,19 +83,11 @@ function scribe($filter) {
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
     'URI' => $_SERVER['REQUEST_URI']
   ]);
-})();
 
-/* Define CACHE */
-
-(function() {
   if(isset(DIR['CACHES']) && !empty(DIR['CACHES'])) {
     define('CACHE', path(DIR['CACHES'], true) . '%d.%d.php');
   }
-})();
 
-/* Create Files and Directories */
-
-(function() {
   if(!file_exists('.htaccess')) {
     $htaccess = implode("\n", [
       '<IfModule mod_rewrite.c>',
@@ -138,8 +124,6 @@ function scribe($filter) {
     }
   }
 })();
-
-/* Define LOCALES */
 
 (function() {
   $directory = rtrim(path(DIR['LOCALES'], true), '/');
@@ -207,8 +191,6 @@ function scribe($filter) {
   define('LOCALES', $locales);
 })();
 
-/* Define LOCALE and URI */
-
 (function() {
   $uri = explode('/', strtok(APP['URI'], '?'));
   $uri = array_filter(array_diff($uri, explode('/', APP['ROOT'])));
@@ -241,8 +223,6 @@ function scribe($filter) {
   define('URI', $uri);
 })();
 
-/* Define TRANSCRIPT or Redirect */
-
 (function() {
   if(!empty(SET['LOCALE'])) {
     $pattern = '/[a-z]{2}-[a-z]{2}/';
@@ -265,8 +245,6 @@ function scribe($filter) {
     exit;
   }
 })();
-
-/* Define CONTENT and Evaluate ROUTE */
 
 (function() {
   $path = URI;
@@ -335,8 +313,6 @@ function scribe($filter) {
 
   define('PATH', $path);
 })();
-
-/* Redirect or Render Page */
 
 (function() {
   ob_start(function($filter) {
