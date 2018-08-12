@@ -221,28 +221,24 @@ function scribe($filter) {
   }
 
   define('URI', $uri);
-})();
 
-(function() {
-  if(!empty(SET['LOCALE'])) {
+  if(!defined('LOCALE') && !empty(SET['LOCALE'])) {
     $pattern = '/[a-z]{2}-[a-z]{2}/';
     $language = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    $default = str_replace('+', '-', SET['LOCALE']);
+    $uri = implode(URI, '/');
 
     preg_match_all($pattern, $language, $request, PREG_PATTERN_ORDER);
 
-    foreach(reset($request) as $locale) {
+    foreach(array_merge(reset($request), [$default]) as $locale) {
       foreach(LOCALES as $locales) {
         if(in_array($locale, array_column($locales, 'CODE'))) {
-          header('Location: ' . path(reset($locales)['URI']));
+          header('Location: ' . path(reset($locales)['URI'] . $uri));
 
           exit;
         }
       }
     }
-
-    header('Location: ' . path(SET['LOCALE']));
-
-    exit;
   }
 })();
 
