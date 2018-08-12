@@ -10,6 +10,7 @@
 /* Application Settings */
 
 define('DIR', [
+  'CACHES' => '/caches/',
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
   'LOCALES' => '/locales/',
@@ -90,7 +91,15 @@ function scribe($filter) {
   ]);
 })();
 
-/* Create Rewrite */
+/* Define CACHE */
+
+(function() {
+  if(isset(DIR['CACHES']) && !empty(DIR['CACHES'])) {
+    define('CACHE', path(DIR['CACHES'], true) . '%d.%d.php');
+  }
+})();
+
+/* Create Files and Directories */
 
 (function() {
   if(!file_exists('.htaccess')) {
@@ -108,11 +117,7 @@ function scribe($filter) {
 
     file_put_contents('.htaccess', $htaccess);
   }
-})();
 
-/* Create Directories */
-
-(function() {
   foreach(DIR as $directory => $path) {
     $path = trim($path, '/') . '/';
 
