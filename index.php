@@ -71,8 +71,8 @@ function relay($define, $filter) {
 }
 
 function scribe($filter) {
-  if(defined('TRANSCRIPT') && @TRANSCRIPT[$filter]) {
-    $return = TRANSCRIPT[$filter];
+  if(defined('LOCALE') && @LOCALE['TRANSCRIPT'][$filter]) {
+    $return = LOCALE['TRANSCRIPT'][$filter];
   } else {
     $return = $filter;
   }
@@ -159,11 +159,18 @@ function scribe($filter) {
       $major = basename(dirname($locale));
       $minor = trim($filename, $major . '+-');
       $uri = '/' . $major . '/';
-      $files = [
+      $transcript = [];
+
+      foreach([
         trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
         dirname($locale) . '/' . $major . '.json',
         $locale
-      ];
+      ] as $file) {
+        if(file_exists($file)) {
+          $file = json_decode(file_get_contents($file), true);
+          $transcript = $file + $transcript;
+        }
+      }
 
       switch(substr($filename, 3)) {
         case $major:
@@ -184,7 +191,7 @@ function scribe($filter) {
       $locales[$major][$minor] = [
         'CODE' => $language . '-' . $country,
         'COUNTRY' => $country,
-        'FILES' => $files,
+        'TRANSCRIPT' => $transcript,
         'LANGUAGE' => $language,
         'URI' => $uri,
       ];
@@ -237,18 +244,7 @@ function scribe($filter) {
 /* Define TRANSCRIPT or Redirect */
 
 (function() {
-  if(defined('LOCALE')) {
-    $transcripts = [];
-
-    foreach(LOCALE['FILES'] as $file) {
-      if(file_exists($file)) {
-        $file = json_decode(file_get_contents($file), true);
-        $transcripts = $file + $transcripts;
-      }
-    }
-
-    define('TRANSCRIPT', $transcripts);
-  } else if(!empty(SET['LOCALE'])) {
+  if(!empty(SET['LOCALE'])) {
     $pattern = '/[a-z]{2}-[a-z]{2}/';
     $language = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
