@@ -273,6 +273,12 @@ function scribe($filter) {
         $path = REALPATH;
       define('CONTENT', ob_get_clean());
 
+      if(defined('REDIRECT')) {
+        header('Location: ' . path(REDIRECT));
+
+        exit;
+      }
+
       if(defined('ROUTE')) {
         $facade = array_diff_assoc(URI, $path);
 
@@ -324,10 +330,6 @@ function scribe($filter) {
   });
     if(array_diff(URI, PATH)) {
       header('Location: ' . path(implode('/', PATH)));
-
-      exit;
-    } else if(defined('REDIRECT')) {
-      header('Location: ' . path(REDIRECT));
 
       exit;
     } else {
