@@ -11,6 +11,7 @@ Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple 
 - Simple Localization
 - Layout Templates
 - Native PHP Code
+- Zero Dependency
 
 ### Structure Example
 
