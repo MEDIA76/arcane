@@ -1,13 +1,13 @@
 # Arcane
 
-Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple web developing or prototyping even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file (~8KB).
+Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple web prototyping/developing even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file (~8KB).
 
 ### Highlights
 
 - Clean URL Paths
 - Unique Routing
 - HTML Minification
-- Clear File Structure
+- Flexible Directories
 - Simple Localization
 - Layout Templates
 - Native PHP Code
@@ -17,6 +17,7 @@ Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple 
 
 ``` txt
 arcane/
+├── caches/
 ├── images/
 │   └── logo.svg
 ├── layouts/

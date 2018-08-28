@@ -13,20 +13,20 @@
 ###### `Path`
 
 > `path(null)`: Returns the current url path `string`. <nobr />  
-> `path(['constant', '/path/'])`: Returns the reconstructed url path `string` under assigned DIR `constant`. <nobr />  
+> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. <nobr />  
 > `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset. <nobr />  
-> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path.
+> `path(['constant', '/path/'])`: Returns the reconstructed url path `string` under assigned DIR `constant`.
 
 ``` php
 <?= path(); ?>
 
-<?= path(['IMAGES', '/logo.svg']); ?>
-
-<?= path(2); ?>
-
 <?= path('/about/'); ?>
 
 <?= path('/styles/selectors.css', true); ?>
+
+<?= path(2); ?>
+
+<?= path(['IMAGES', '/logo.svg']); ?>
 ```
 
 - Does not localize paths with file extensions.
@@ -86,8 +86,8 @@ locales/
 
 ### Pages
 
-> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
+> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('ROUTE', [array])`: Sets acceptable page routes.
 
 ``` php
