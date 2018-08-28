@@ -25,16 +25,41 @@ define('SET', [
   'MINIFY' => true
 ]);
 
-function path($filter = null, $actual = false) {
-  if(is_null($filter)) {
-    $return = str_replace('//', '/', '/' . implode(@URI, '/') . '/');
-  } else if(is_int($filter)) {
-    $return = @URI[$filter];
+function cache($path, $data = null) {
+  if(is_array($path)) {
+    list($path, $access) = $path;
+  }
+
+  $path = path($path, true);
+  $name = crc32($path);
+  $time = $access ?? false ? fileatime($path) : filemtime($path);
+  $file = path(DIR['CACHES'], true) . implode('.', [$name, $time]) . '.php';
+
+  if(is_bool($data)) {
+    return (file_exists($file) == $data);
+  } else if(is_null($data)) {
+    if(file_exists($file)) {
+      $return = file_get_contents($file);
+    }
+
+    return $return ?? $data;
+  } else {
+    array_map('unlink', glob($name . '.*.php'));
+
+    file_put_contents($file, $data);
+  }
+}
+
+function path($locator = null, $actual = false) {
+  if(is_null($locator)) {
+    return str_replace('//', '/', '/' . implode(@URI, '/') . '/');
+  } else if(is_int($locator)) {
+    return @URI[$locator];
   } else {
     $return = $actual ? APP['DIR'] : APP['ROOT'];
 
-    if(is_array($filter)) {
-      list($define, $filter) = $filter;
+    if(is_array($locator)) {
+      list($define, $locator) = $locator;
 
       $define = DIR[strtoupper($define)];
 
@@ -43,37 +68,32 @@ function path($filter = null, $actual = false) {
       }
     }
 
-    if(!strpos($filter, '.')) {
+    if(!strpos($locator, '.')) {
       if(defined('LOCALE') && !$actual) {
-        $filter = LOCALE['URI'] . '/' . $filter;
+        $locator = LOCALE['URI'] . '/' . $locator;
       }
 
-      if(!strpos($filter, '?')) {
-        $filter .= '/';
+      if(!strpos($locator, '?')) {
+        $locator .= '/';
       }
     }
 
-    $return = $return . '/' . $filter;
-    $return = preg_replace('#(^|[^:])//+#', '\\1/', $return);
+    return preg_replace('#(^|[^:])//+#', '\\1/', $return . '/' . $locator);
   }
-
-  return $return;
 }
 
-function relay($define, $filter) {
+function relay($define, $function) {
   ob_start();
-    $filter();
+    $function();
   define(strtoupper($define), ob_get_clean());
 }
 
-function scribe($filter) {
-  if(defined('LOCALE') && @LOCALE['TRANSCRIPT'][$filter]) {
-    $return = LOCALE['TRANSCRIPT'][$filter];
-  } else {
-    $return = $filter;
+function scribe($string) {
+  if(defined('LOCALE') && @LOCALE['TRANSCRIPT'][$string]) {
+    $return = LOCALE['TRANSCRIPT'][$string];
   }
 
-  return $return;
+  return $return ?? $string;
 }
 
 (function() {
@@ -335,13 +355,10 @@ function scribe($filter) {
       $return = str_replace([
         "\r\n", "\r", "\n", "\t"
       ], '', $filter);
-
-      return $return;
-    } else {
-      return $filter;
     }
-  });
 
+    return $return ?? $filter;
+  });
     if(defined('LAYOUTFILE')) {
       require_once LAYOUTFILE;
     } else {
