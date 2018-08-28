@@ -5,7 +5,7 @@
 > `'ERRORS' => boolean`: Toggles the display of PHP errors. <nobr />  
 > `'INDEX' => 'filename'`: Sets the default page for directories. <nobr />  
 > `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
-> `'LOCALE' => '/path/'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
+> `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
 > `'MINIFY' => boolean`: Toggles the minification of source code.
 
 ### Functions
@@ -13,20 +13,20 @@
 ###### `Path`
 
 > `path(null)`: Returns the current url path `string`. <nobr />  
-> `path(['constant', '/path/'])`: Returns the reconstructed url path `string` under assigned DIR `constant`. <nobr />  
+> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. <nobr />  
 > `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset. <nobr />  
-> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path.
+> `path(['constant', '/path/'])`: Returns the reconstructed url path `string` under assigned DIR `constant`.
 
 ``` php
 <?= path(); ?>
 
-<?= path(['IMAGES', '/logo.svg']); ?>
-
-<?= path(2); ?>
-
 <?= path('/about/'); ?>
 
 <?= path('/styles/selectors.css', true); ?>
+
+<?= path(2); ?>
+
+<?= path(['IMAGES', '/logo.svg']); ?>
 ```
 
 - Does not localize paths with file extensions.
@@ -86,8 +86,8 @@ locales/
 
 ### Pages
 
-> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
+> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('ROUTE', [array])`: Sets acceptable page routes.
 
 ``` php
