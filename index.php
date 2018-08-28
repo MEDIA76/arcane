@@ -44,7 +44,7 @@ function cache($path, $data = null) {
 
     return $return ?? $data;
   } else {
-    array_map('unlink', glob($name . '.*.php'));
+    array_map('unlink', glob(strtok($file, '.') . '.*.php'));
 
     file_put_contents($file, $data);
   }
@@ -104,10 +104,6 @@ function scribe($string) {
     'URI' => $_SERVER['REQUEST_URI']
   ]);
 
-  if(isset(DIR['CACHES']) && !empty(DIR['CACHES'])) {
-    define('CACHE', path(DIR['CACHES'], true) . '%d.%d.php');
-  }
-
   if(!file_exists('.htaccess')) {
     $htaccess = implode("\n", [
       '<IfModule mod_rewrite.c>',
@@ -147,15 +143,7 @@ function scribe($string) {
 
 (function() {
   $directory = rtrim(path(DIR['LOCALES'], true), '/');
-  $locales = [];
-
-  if(defined('CACHE')) {
-    $cache = sprintf(CACHE, crc32('LOCALES'), fileatime($directory));
-
-    if(file_exists($cache)) {
-      $locales = unserialize(file_get_contents($cache));
-    }
-  }
+  $locales = unserialize(cache([DIR['LOCALES'], true])) ?? [];
 
   if(empty($locales)) {
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
@@ -201,11 +189,7 @@ function scribe($string) {
       ];
     }
 
-    if(defined('CACHE')) {
-      array_map('unlink', glob(strtok($cache, '.') . '.*.php'));
-
-      file_put_contents($cache, serialize($locales));
-    }
+    cache([DIR['LOCALES'], true], serialize($locales));
   }
 
   define('LOCALES', $locales);
