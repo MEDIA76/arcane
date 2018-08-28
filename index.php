@@ -143,9 +143,11 @@ function scribe($string) {
 
 (function() {
   $directory = rtrim(path(DIR['LOCALES'], true), '/');
-  $locales = unserialize(cache([DIR['LOCALES'], true])) ?? [];
+  $locales = cache([DIR['LOCALES'], true]) ?? [];
 
-  if(empty($locales)) {
+  if(!empty($locales)) {
+    $locales = unserialize($locales);
+  } else {
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
       $filename = basename($locale, '.json');
       $major = basename(dirname($locale));
@@ -159,7 +161,7 @@ function scribe($string) {
         $locale
       ] as $file) {
         if(file_exists($file)) {
-          $file = json_decode(file_get_contents($file), true);
+          $file = json_decode(file_get_contents($file), true) ?? [];
           $transcript = $file + $transcript;
         }
       }
@@ -189,7 +191,9 @@ function scribe($string) {
       ];
     }
 
-    cache([DIR['LOCALES'], true], serialize($locales));
+    if(!empty($locales)) {
+      cache([DIR['LOCALES'], true], serialize($locales));
+    }
   }
 
   define('LOCALES', $locales);
