@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane: Intuitive PHP Prototyping
+ * Arcane: Intuitive PHP Boilerplate
  * Copyright 2017-2018 Joshua Britt
  * https://github.com/capachow/arcane/
  * Released under the MIT License
