@@ -2,6 +2,14 @@
 
 Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple web prototyping/developing even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file (~8KB).
 
+### Usage
+
+- [http://getarcane.com/download/](http://getarcane.com/download/)
+
+``` shell
+curl -fsLO copy.getarcane.com/index.php
+```
+
 ### Highlights
 
 - Clean URL Paths
