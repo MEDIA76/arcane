@@ -7,7 +7,7 @@ Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple 
 - Clean URL Paths
 - Unique Routing
 - HTML Minification
-- Flexible Directories
+- Flexible Structure
 - Simple Localization
 - Layout Templates
 - Native PHP Code
