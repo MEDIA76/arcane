@@ -262,21 +262,30 @@ function scribe($filter) {
     }
 
     if(is_file($page)) {
-      ob_start();
-        define('REALPATH', $path);
-        define('PAGEFILE', $page);
+      define('PATH', $path);
+      define('PAGEFILE', $page);
 
+      ob_start();
         unset($path, $page);
 
         require_once PAGEFILE;
 
-        $path = REALPATH;
+        $path = PATH;
       define('CONTENT', ob_get_clean());
 
       if(defined('REDIRECT')) {
         header('Location: ' . path(REDIRECT));
 
         exit;
+      }
+
+      if((defined('LAYOUT') && !empty(LAYOUT)) || !empty(SET['LAYOUT'])) {
+        $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
+        $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
+
+        if(file_exists($layout)) {
+          define('LAYOUTFILE', $layout);
+        }
       }
 
       if(defined('ROUTE')) {
@@ -313,7 +322,11 @@ function scribe($filter) {
     array_pop($path);
   } while(true);
 
-  define('PATH', $path);
+  if(array_diff(URI, $path)) {
+    header('Location: ' . path(implode('/', $path)));
+
+    exit;
+  }
 })();
 
 (function() {
@@ -328,25 +341,11 @@ function scribe($filter) {
       return $filter;
     }
   });
-    if(array_diff(URI, PATH)) {
-      header('Location: ' . path(implode('/', PATH)));
 
-      exit;
+    if(defined('LAYOUTFILE')) {
+      require_once LAYOUTFILE;
     } else {
-      if((defined('LAYOUT') && !empty(LAYOUT)) || !empty(SET['LAYOUT'])) {
-        $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
-        $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
-      }
-
-      if(isset($layout) && file_exists($layout)) {
-        define('LAYOUTFILE', $layout);
-
-        unset($layout);
-
-        require_once LAYOUTFILE;
-      } else {
-        echo CONTENT;
-      }
+      echo CONTENT;
     }
   ob_get_flush();
 })();
