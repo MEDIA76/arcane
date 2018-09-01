@@ -51,19 +51,21 @@ function cache($path, $content = null) {
 
 function path($locator = null, $actual = false) {
   if(is_null($locator)) {
-    return str_replace('//', '/', '/' . implode(@URI, '/') . '/');
+    return str_replace('//', '/', '/' . implode(URI, '/') . '/');
   } else if(is_int($locator)) {
-    return @URI[$locator];
+    return URI[$locator] ?? null;
   } else {
     $return = $actual ? APP['DIR'] : APP['ROOT'];
 
     if(is_array($locator)) {
-      list($define, $locator) = $locator;
+      list($define, $locator) = [$locator[0], $locator[1] ?? null];
 
-      $define = DIR[strtoupper($define)];
+      if(!is_null($define)) {
+        $define = DIR[strtoupper($define)];
 
-      if(isset($define) && !empty($define)) {
-        $return .= $define;
+        if(isset($define) && !empty($define)) {
+          $return .= $define;
+        }
       }
     }
 
