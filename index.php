@@ -25,28 +25,27 @@ define('SET', [
   'MINIFY' => true
 ]);
 
-function cache($path, $data = null) {
+function cache($path, $content = null) {
   if(is_array($path)) {
-    list($path, $access) = $path;
+    list($path, $access) = [$path[0], $path[1] ?? false];
   }
 
   $path = path($path, true);
-  $name = crc32($path);
-  $time = $access ?? false ? fileatime($path) : filemtime($path);
-  $file = path(DIR['CACHES'], true) . implode('.', [$name, $time]) . '.php';
+  $access = $access ?? false == true ? fileatime($path) : filemtime($path);
+  $file = path(DIR['CACHES'], true) . crc32($path) . '.' . $access . '.php';
 
-  if(is_bool($data)) {
-    return (file_exists($file) == $data);
-  } else if(is_null($data)) {
+  if(is_bool($content)) {
+    return (file_exists($file) == $content);
+  } else if(is_null($content)) {
     if(file_exists($file)) {
       $return = file_get_contents($file);
     }
 
-    return $return ?? $data;
+    return $return ?? $content;
   } else {
     array_map('unlink', glob(strtok($file, '.') . '.*.php'));
 
-    file_put_contents($file, $data);
+    file_put_contents($file, $content);
   }
 }
 
@@ -142,12 +141,13 @@ function scribe($string) {
 })();
 
 (function() {
-  $directory = rtrim(path(DIR['LOCALES'], true), '/');
   $locales = cache([DIR['LOCALES'], true]) ?? [];
 
   if(!empty($locales)) {
     $locales = unserialize($locales);
   } else {
+    $directory = rtrim(path(DIR['LOCALES'], true), '/');
+
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
       $filename = basename($locale, '.json');
       $major = basename(dirname($locale));
