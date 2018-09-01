@@ -83,10 +83,14 @@ function path($locator = null, $actual = false) {
   }
 }
 
-function relay($define, $function) {
-  ob_start();
-    $function();
-  define(strtoupper($define), ob_get_clean());
+function relay($define, $content) {
+  if(is_callable($content)) {
+    ob_start();
+      $content();
+    $content = ob_get_clean();
+  }
+
+  define(strtoupper($define), $content);
 }
 
 function scribe($string) {
