@@ -94,11 +94,13 @@ function relay($define, $content) {
 }
 
 function scribe($string) {
-  if(defined('LOCALE') && @LOCALE['TRANSCRIPT'][$string]) {
-    $return = LOCALE['TRANSCRIPT'][$string];
+  if(defined('LOCALE')) {
+    if(array_key_exists($string, LOCALE['TRANSCRIPT'])) {
+      $string = LOCALE['TRANSCRIPT'][$string];
+    }
   }
 
-  return $return ?? $string;
+  return $string;
 }
 
 (function() {
