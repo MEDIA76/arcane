@@ -38,10 +38,10 @@ function cache($path, $content = null) {
     return (file_exists($file) == $content);
   } else if(is_null($content)) {
     if(file_exists($file)) {
-      $return = file_get_contents($file);
+      $content = file_get_contents($file);
     }
 
-    return $return ?? $content;
+    return $content;
   } else {
     array_map('unlink', glob(strtok($file, '.') . '.*.php'));
 
@@ -55,7 +55,7 @@ function path($locator = null, $actual = false) {
   } else if(is_int($locator)) {
     return URI[$locator] ?? null;
   } else {
-    $return = $actual ? APP['DIR'] : APP['ROOT'];
+    $prepend = $actual ? APP['DIR'] : APP['ROOT'];
 
     if(is_array($locator)) {
       list($define, $locator) = [$locator[0], $locator[1] ?? null];
@@ -64,7 +64,7 @@ function path($locator = null, $actual = false) {
         $define = DIR[strtoupper($define)];
 
         if(isset($define) && !empty($define)) {
-          $return .= $define;
+          $prepend .= $define;
         }
       }
     }
@@ -79,7 +79,10 @@ function path($locator = null, $actual = false) {
       }
     }
 
-    return preg_replace('#(^|[^:])//+#', '\\1/', $return . '/' . $locator);
+    $locator = $prepend . '/' . $locator;
+    $locator = preg_replace('#(^|[^:])//+#', '\\1/', $locator);
+
+    return $locator;
   }
 }
 
@@ -348,12 +351,12 @@ function scribe($string) {
 (function() {
   ob_start(function($filter) {
     if(SET['MINIFY']) {
-      $return = str_replace([
+      $filter = str_replace([
         "\r\n", "\r", "\n", "\t"
       ], '', $filter);
     }
 
-    return $return ?? $filter;
+    return $filter;
   });
     if(defined('LAYOUTFILE')) {
       require_once LAYOUTFILE;
