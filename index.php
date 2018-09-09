@@ -111,7 +111,8 @@ function scribe($string) {
   define('APP', [
     'DIR' => __DIR__,
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
-    'URI' => $_SERVER['REQUEST_URI']
+    'URI' => $_SERVER['REQUEST_URI'],
+    'LANG' => $_SERVER['HTTP_ACCEPT_LANGUAGE']
   ]);
 
   if(!file_exists('.htaccess')) {
@@ -244,16 +245,14 @@ function scribe($string) {
   define('URI', $uri);
 
   if(!defined('LOCALE') && !empty(SET['LOCALE'])) {
-    $pattern = '/[a-z]{2}-[a-z]{2}/';
-    $language = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     $default = str_replace('+', '-', SET['LOCALE']);
     $uri = implode(URI, '/');
 
-    preg_match_all($pattern, $language, $request, PREG_PATTERN_ORDER);
+    preg_match_all("/[a-z]{2}-[a-z]{2}/i", APP['LANG'], $request);
 
     foreach(array_merge(reset($request), [$default]) as $locale) {
       foreach(LOCALES as $locales) {
-        if(in_array($locale, array_column($locales, 'CODE'))) {
+        if(preg_grep("/{$locale}/i", array_column($locales, 'CODE'))) {
           header('Location: ' . path(reset($locales)['URI'] . $uri));
 
           exit;
