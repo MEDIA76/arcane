@@ -293,7 +293,11 @@ function scribe($string) {
       define('CONTENT', ob_get_clean());
 
       if(defined('REDIRECT')) {
-        header('Location: ' . path(REDIRECT));
+        if(!array_key_exists('host', parse_url(REDIRECT))) {
+          $redirect = path(REDIRECT);
+        }
+
+        header('Location: ' . $redirect ?? REDIRECT);
 
         exit;
       }
