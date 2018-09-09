@@ -8,6 +8,15 @@
 > `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
 > `'MINIFY' => boolean`: Toggles the minification of source code.
 
+### Constants
+
+> `LOCALE`: Contains `array` of current locale data form `LOCALES`. <nobr />  
+> `LOCALES`: Contains `array` of available locales data. <nobr />  
+> `PATH`: Contains `array` of current file segments. <nobr />  
+> `URI`: Contains `array` of current url segments.
+
+- Each `LOCALE` contains `CODE`, `COUNTRY`, `TRANSCRIPT`, `LANGUAGE`, and `URI` keys.
+
 ### Functions
 
 ###### `Path`
@@ -52,7 +61,7 @@
 
 ### Layouts
 
-> `CONTENT`: Returns the page content. <nobr />  
+> `CONTENT`: Returns the page content.
 
 ``` html
 <html>
@@ -69,20 +78,36 @@
 
 ``` html
 locales/
-├── co/
-│   ├── la-co.json
-│   └── co.json
-└── la.json
+├── ca/
+│   ├── en-ca.json
+│   └── fr-ca.json
+├── mx/
+│   └── es-mx.json
+├── us/
+│   ├── en-us.json
+│   ├── es-us.json
+│   └── us.json
+├── es.json
+└── en.json
 
 locales/
-├── la/
-│   ├── la-co.json
-│   └── la.json
-└── co.json
+├── en/
+│   ├── en-ca.json
+│   ├── en+us.json
+│   └── en.json
+├── es/
+│   ├── es+mx.json
+│   ├── es-us.json
+│   └── es.json
+├── fr/
+│   └── fr+ca.json
+├── ca.json
+└── us.json
 ```
 
-- Uses case-insentative IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co).
-- Folders dictate locale priority and singular ISO files (la/co) are shared resources.
+- Supports both country or language localization (dictated by folder name).
+- Uses IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co).
+- Singular `ISO` files (la/co) are defaulted and shared locale resources.
 
 ### Pages
 
