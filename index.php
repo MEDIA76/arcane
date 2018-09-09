@@ -25,46 +25,47 @@ define('SET', [
   'MINIFY' => true
 ]);
 
-function cache($path, $data = null) {
+function cache($path, $content = null) {
   if(is_array($path)) {
-    list($path, $access) = $path;
+    list($path, $access) = [$path[0], $path[1] ?? false];
   }
 
   $path = path($path, true);
-  $name = crc32($path);
-  $time = $access ?? false ? fileatime($path) : filemtime($path);
-  $file = path(DIR['CACHES'], true) . implode('.', [$name, $time]) . '.php';
+  $access = $access ?? false == true ? fileatime($path) : filemtime($path);
+  $file = path(DIR['CACHES'], true) . crc32($path) . '.' . $access . '.php';
 
-  if(is_bool($data)) {
-    return (file_exists($file) == $data);
-  } else if(is_null($data)) {
+  if(is_bool($content)) {
+    return (file_exists($file) == $content);
+  } else if(is_null($content)) {
     if(file_exists($file)) {
-      $return = file_get_contents($file);
+      $content = file_get_contents($file);
     }
 
-    return $return ?? $data;
+    return $content;
   } else {
     array_map('unlink', glob(strtok($file, '.') . '.*.php'));
 
-    file_put_contents($file, $data);
+    file_put_contents($file, $content);
   }
 }
 
 function path($locator = null, $actual = false) {
   if(is_null($locator)) {
-    return str_replace('//', '/', '/' . implode(@URI, '/') . '/');
+    return str_replace('//', '/', '/' . implode(URI, '/') . '/');
   } else if(is_int($locator)) {
-    return @URI[$locator];
+    return URI[$locator] ?? null;
   } else {
-    $return = $actual ? APP['DIR'] : APP['ROOT'];
+    $prepend = $actual ? APP['DIR'] : APP['ROOT'];
 
     if(is_array($locator)) {
-      list($define, $locator) = $locator;
+      list($define, $locator) = [$locator[0], $locator[1] ?? null];
 
-      $define = DIR[strtoupper($define)];
+      if(!is_null($define)) {
+        $define = DIR[strtoupper($define)];
 
-      if(isset($define) && !empty($define)) {
-        $return .= $define;
+        if(isset($define) && !empty($define)) {
+          $prepend .= $define;
+        }
       }
     }
 
@@ -78,22 +79,31 @@ function path($locator = null, $actual = false) {
       }
     }
 
-    return preg_replace('#(^|[^:])//+#', '\\1/', $return . '/' . $locator);
+    $locator = $prepend . '/' . $locator;
+    $locator = preg_replace("#(^|[^:])//+#", '\\1/', $locator);
+
+    return $locator;
   }
 }
 
-function relay($define, $function) {
-  ob_start();
-    $function();
-  define(strtoupper($define), ob_get_clean());
+function relay($define, $content) {
+  if(is_callable($content)) {
+    ob_start();
+      $content();
+    $content = ob_get_clean();
+  }
+
+  define(strtoupper($define), $content);
 }
 
 function scribe($string) {
-  if(defined('LOCALE') && @LOCALE['TRANSCRIPT'][$string]) {
-    $return = LOCALE['TRANSCRIPT'][$string];
+  if(defined('LOCALE')) {
+    if(array_key_exists($string, LOCALE['TRANSCRIPT'])) {
+      $string = LOCALE['TRANSCRIPT'][$string];
+    }
   }
 
-  return $return ?? $string;
+  return $string;
 }
 
 (function() {
@@ -101,7 +111,8 @@ function scribe($string) {
   define('APP', [
     'DIR' => __DIR__,
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
-    'URI' => $_SERVER['REQUEST_URI']
+    'URI' => $_SERVER['REQUEST_URI'],
+    'LANG' => $_SERVER['HTTP_ACCEPT_LANGUAGE']
   ]);
 
   if(!file_exists('.htaccess')) {
@@ -109,7 +120,7 @@ function scribe($string) {
       '<IfModule mod_rewrite.c>',
       '  RewriteEngine On',
       '  RewriteCond %{REQUEST_URI} !(/$|\.|^$)',
-      '  RewriteRule ^(.*)$ %{REQUEST_URI}/ [R=301,L]',
+      '  RewriteRule ^(.*)$ %{REQUEST_URI}/ [L,R=301]',
       '  RewriteCond %{REQUEST_FILENAME} !-f',
       '  RewriteRule . index.php [L]',
       '  RewriteCond %{REQUEST_FILENAME} -d',
@@ -142,53 +153,57 @@ function scribe($string) {
 })();
 
 (function() {
-  $directory = rtrim(path(DIR['LOCALES'], true), '/');
   $locales = cache([DIR['LOCALES'], true]) ?? [];
 
   if(!empty($locales)) {
     $locales = unserialize($locales);
   } else {
+    $directory = rtrim(path(DIR['LOCALES'], true), '/');
+
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
       $filename = basename($locale, '.json');
       $major = basename(dirname($locale));
-      $minor = trim(preg_replace('/' . $major . '/', '', $filename, 1), '+-');
-      $uri = '/' . $major . '/';
-      $transcript = [];
+      $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
 
-      foreach([
-        trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
-        dirname($locale) . '/' . $major . '.json',
-        $locale
-      ] as $file) {
-        if(file_exists($file)) {
-          $file = json_decode(file_get_contents($file), true) ?? [];
-          $transcript = $file + $transcript;
+      if(ctype_alpha($minor)) {
+        $uri = '/' . $major . '/';
+        $transcript = [];
+
+        foreach([
+          trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
+          dirname($locale) . '/' . $major . '.json',
+          $locale
+        ] as $file) {
+          if(file_exists($file)) {
+            $file = json_decode(file_get_contents($file), true) ?? [];
+            $transcript = $file + $transcript;
+          }
         }
+
+        switch(substr($filename, 3)) {
+          case $major:
+            list($language, $country) = [$minor, $major];
+          break;
+
+          case $minor:
+            list($language, $country) = [$major, $minor];
+          break;
+        }
+
+        if(strpos($locale, '+')) {
+          $minor = null;
+        } else {
+          $uri .= $minor . '/';
+        }
+
+        $locales[$major][$minor] = [
+          'CODE' => $language . '-' . $country,
+          'COUNTRY' => $country,
+          'TRANSCRIPT' => $transcript,
+          'LANGUAGE' => $language,
+          'URI' => $uri,
+        ];
       }
-
-      switch(substr($filename, 3)) {
-        case $major:
-          list($language, $country) = [$minor, $major];
-        break;
-
-        case $minor:
-          list($language, $country) = [$major, $minor];
-        break;
-      }
-
-      if(strpos($locale, '+')) {
-        $minor = null;
-      } else {
-        $uri .= $minor . '/';
-      }
-
-      $locales[$major][$minor] = [
-        'CODE' => $language . '-' . $country,
-        'COUNTRY' => $country,
-        'TRANSCRIPT' => $transcript,
-        'LANGUAGE' => $language,
-        'URI' => $uri,
-      ];
     }
 
     if(!empty($locales)) {
@@ -210,12 +225,11 @@ function scribe($string) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
         $locale = LOCALES[$uri[1]][$uri[2]];
 
-        array_shift($uri);
-        array_shift($uri);
+        array_splice($uri, 0, 2);
       } else if(array_key_exists(null, LOCALES[$uri[1]])) {
         $locale = LOCALES[$uri[1]][null];
 
-        array_shift($uri);
+        array_splice($uri, 0, 1);
       }
     }
 
@@ -231,16 +245,14 @@ function scribe($string) {
   define('URI', $uri);
 
   if(!defined('LOCALE') && !empty(SET['LOCALE'])) {
-    $pattern = '/[a-z]{2}-[a-z]{2}/';
-    $language = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     $default = str_replace('+', '-', SET['LOCALE']);
     $uri = implode(URI, '/');
 
-    preg_match_all($pattern, $language, $request, PREG_PATTERN_ORDER);
+    preg_match_all("/[a-z]{2}-[a-z]{2}/i", APP['LANG'], $request);
 
     foreach(array_merge(reset($request), [$default]) as $locale) {
       foreach(LOCALES as $locales) {
-        if(in_array($locale, array_column($locales, 'CODE'))) {
+        if(preg_grep("/{$locale}/i", array_column($locales, 'CODE'))) {
           header('Location: ' . path(reset($locales)['URI'] . $uri));
 
           exit;
@@ -282,7 +294,11 @@ function scribe($string) {
       define('CONTENT', ob_get_clean());
 
       if(defined('REDIRECT')) {
-        header('Location: ' . path(REDIRECT));
+        if(!array_key_exists('host', parse_url(REDIRECT))) {
+          $redirect = path(REDIRECT);
+        }
+
+        header('Location: ' . $redirect ?? REDIRECT);
 
         exit;
       }
@@ -340,12 +356,12 @@ function scribe($string) {
 (function() {
   ob_start(function($filter) {
     if(SET['MINIFY']) {
-      $return = str_replace([
+      $filter = str_replace([
         "\r\n", "\r", "\n", "\t"
       ], '', $filter);
     }
 
-    return $return ?? $filter;
+    return $filter;
   });
     if(defined('LAYOUTFILE')) {
       require_once LAYOUTFILE;
