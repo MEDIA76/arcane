@@ -80,7 +80,7 @@ function path($locator = null, $actual = false) {
     }
 
     $locator = $prepend . '/' . $locator;
-    $locator = preg_replace('#(^|[^:])//+#', '\\1/', $locator);
+    $locator = preg_replace("#(^|[^:])//+#", '\\1/', $locator);
 
     return $locator;
   }
@@ -119,7 +119,7 @@ function scribe($string) {
       '<IfModule mod_rewrite.c>',
       '  RewriteEngine On',
       '  RewriteCond %{REQUEST_URI} !(/$|\.|^$)',
-      '  RewriteRule ^(.*)$ %{REQUEST_URI}/ [R=301,L]',
+      '  RewriteRule ^(.*)$ %{REQUEST_URI}/ [L,R=301]',
       '  RewriteCond %{REQUEST_FILENAME} !-f',
       '  RewriteRule . index.php [L]',
       '  RewriteCond %{REQUEST_FILENAME} -d',
@@ -162,7 +162,7 @@ function scribe($string) {
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
       $filename = basename($locale, '.json');
       $major = basename(dirname($locale));
-      $minor = trim(preg_replace('/' . $major . '/', '', $filename, 1), '+-');
+      $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
 
       if(ctype_alpha($minor)) {
         $uri = '/' . $major . '/';
@@ -224,12 +224,11 @@ function scribe($string) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
         $locale = LOCALES[$uri[1]][$uri[2]];
 
-        array_shift($uri);
-        array_shift($uri);
+        array_splice($uri, 0, 2);
       } else if(array_key_exists(null, LOCALES[$uri[1]])) {
         $locale = LOCALES[$uri[1]][null];
 
-        array_shift($uri);
+        array_splice($uri, 0, 1);
       }
     }
 
