@@ -1,6 +1,6 @@
 # Arcane
 
-Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple web prototyping/developing even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file (~8KB).
+Arcane is unconventional, but beautifully intuitive. Arcane aims to make simple web prototyping/developing even faster by automating the features you want while making it easier to apply the ones you need, all with just one initial file (9 KB).
 
 ### Usage
 
@@ -34,13 +34,12 @@ arcane/
 │   │   └── header.php
 │   └── default.php
 ├── locales/
-│   ├── es/
-│   │   └── es+us.json
 │   ├── en/
-│   │   ├── en-gb.json
-│   │   ├── en+us.json
-│   │   └── en.json
-│   └── us.json
+│   │   └── en+us.json
+│   ├── es/
+│   │   ├── es+mx.json
+│   │   └── es-us.json
+│   └── us.php
 ├── pages/
 │   ├── about.php
 │   ├── blog/
