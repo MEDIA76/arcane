@@ -163,43 +163,46 @@ function scribe($string) {
       $filename = basename($locale, '.json');
       $major = basename(dirname($locale));
       $minor = trim(preg_replace('/' . $major . '/', '', $filename, 1), '+-');
-      $uri = '/' . $major . '/';
-      $transcript = [];
 
-      foreach([
-        trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
-        dirname($locale) . '/' . $major . '.json',
-        $locale
-      ] as $file) {
-        if(file_exists($file)) {
-          $file = json_decode(file_get_contents($file), true) ?? [];
-          $transcript = $file + $transcript;
+      if(ctype_alpha($minor)) {
+        $uri = '/' . $major . '/';
+        $transcript = [];
+
+        foreach([
+          trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
+          dirname($locale) . '/' . $major . '.json',
+          $locale
+        ] as $file) {
+          if(file_exists($file)) {
+            $file = json_decode(file_get_contents($file), true) ?? [];
+            $transcript = $file + $transcript;
+          }
         }
+
+        switch(substr($filename, 3)) {
+          case $major:
+            list($language, $country) = [$minor, $major];
+          break;
+
+          case $minor:
+            list($language, $country) = [$major, $minor];
+          break;
+        }
+
+        if(strpos($locale, '+')) {
+          $minor = null;
+        } else {
+          $uri .= $minor . '/';
+        }
+
+        $locales[$major][$minor] = [
+          'CODE' => $language . '-' . $country,
+          'COUNTRY' => $country,
+          'TRANSCRIPT' => $transcript,
+          'LANGUAGE' => $language,
+          'URI' => $uri,
+        ];
       }
-
-      switch(substr($filename, 3)) {
-        case $major:
-          list($language, $country) = [$minor, $major];
-        break;
-
-        case $minor:
-          list($language, $country) = [$major, $minor];
-        break;
-      }
-
-      if(strpos($locale, '+')) {
-        $minor = null;
-      } else {
-        $uri .= $minor . '/';
-      }
-
-      $locales[$major][$minor] = [
-        'CODE' => $language . '-' . $country,
-        'COUNTRY' => $country,
-        'TRANSCRIPT' => $transcript,
-        'LANGUAGE' => $language,
-        'URI' => $uri,
-      ];
     }
 
     if(!empty($locales)) {
