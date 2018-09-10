@@ -285,13 +285,13 @@ function scribe($string) {
       define('PATH', $path);
       define('PAGEFILE', $page);
 
-      ob_start();
+      relay('CONTENT', function() {
         unset($path, $page);
 
         require_once PAGEFILE;
 
         $path = PATH;
-      define('CONTENT', ob_get_clean());
+      });
 
       if(defined('REDIRECT')) {
         if(!array_key_exists('host', parse_url(REDIRECT))) {
