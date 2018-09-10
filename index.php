@@ -26,26 +26,31 @@ define('SET', [
 ]);
 
 function cache($path, $content = null) {
-  if(is_array($path)) {
-    list($path, $access) = [$path[0], $path[1] ?? false];
+  $path = path($path, true);
+
+  if(is_dir($path)) {
+    $access = fileatime($path);
+  } else if(is_file($path)) {
+    $access = filemtime($path);
   }
 
-  $path = path($path, true);
-  $access = $access ?? false == true ? fileatime($path) : filemtime($path);
-  $file = path(DIR['CACHES'], true) . crc32($path) . '.' . $access . '.php';
+  if(isset($access)) {
+    $file = path(DIR['CACHES'], true) . crc32($path);
+    $file = $file . '.' . $access . '.php';
 
-  if(is_bool($content)) {
-    return (file_exists($file) == $content);
-  } else if(is_null($content)) {
-    if(file_exists($file)) {
-      $content = file_get_contents($file);
+    if(is_bool($content)) {
+      return (file_exists($file) == $content);
+    } else if(is_null($content)) {
+      if(file_exists($file)) {
+        $content = file_get_contents($file);
+      }
+
+      return $content;
+    } else {
+      array_map('unlink', glob(strtok($file, '.') . '.*.php'));
+
+      file_put_contents($file, $content);
     }
-
-    return $content;
-  } else {
-    array_map('unlink', glob(strtok($file, '.') . '.*.php'));
-
-    file_put_contents($file, $content);
   }
 }
 
@@ -153,7 +158,7 @@ function scribe($string) {
 })();
 
 (function() {
-  $locales = cache([DIR['LOCALES'], true]) ?? [];
+  $locales = cache(DIR['LOCALES']) ?? [];
 
   if(!empty($locales)) {
     $locales = unserialize($locales);
@@ -207,7 +212,7 @@ function scribe($string) {
     }
 
     if(!empty($locales)) {
-      cache([DIR['LOCALES'], true], serialize($locales));
+      cache(DIR['LOCALES'], serialize($locales));
     }
   }
 
