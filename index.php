@@ -26,7 +26,9 @@ define('SET', [
 ]);
 
 function cache($path, $content = null) {
-  $path = path($path, true);
+  if(!strstr($path, APP['DIR'])) {
+    $path = path($path, true);
+  }
 
   if(is_dir($path)) {
     $access = fileatime($path);
@@ -43,14 +45,24 @@ function cache($path, $content = null) {
     } else if(is_null($content)) {
       if(file_exists($file)) {
         $content = file_get_contents($file);
+
+        if(preg_match("/^[aO]:.+}$/", $content)) {
+          $content = unserialize($content);
+        }
       }
 
       return $content;
     } else {
       array_map('unlink', glob(strtok($file, '.') . '.*.php'));
 
+      if(is_array($content) || is_object($content)) {
+        $content = serialize($content);
+      }
+
       file_put_contents($file, $content);
     }
+  } else {
+    return false;
   }
 }
 
@@ -160,9 +172,7 @@ function scribe($string) {
 (function() {
   $locales = cache(DIR['LOCALES']) ?? [];
 
-  if(!empty($locales)) {
-    $locales = unserialize($locales);
-  } else {
+  if(empty($locales)) {
     $directory = rtrim(path(DIR['LOCALES'], true), '/');
 
     foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
@@ -212,7 +222,7 @@ function scribe($string) {
     }
 
     if(!empty($locales)) {
-      cache(DIR['LOCALES'], serialize($locales));
+      cache(DIR['LOCALES'], $locales);
     }
   }
 
