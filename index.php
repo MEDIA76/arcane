@@ -26,7 +26,9 @@ define('SET', [
 ]);
 
 function cache($path, $content = null) {
-  $path = path($path, true);
+  if(!strstr($path, APP['DIR'])) {
+    $path = path($path, true);
+  }
 
   if(is_dir($path)) {
     $access = fileatime($path);
