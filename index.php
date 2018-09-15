@@ -26,47 +26,6 @@ define('SET', [
   'MINIFY' => true
 ]);
 
-function cache($path, $content = null) {
-  if(!strstr($path, APP['DIR'])) {
-    $path = path($path, true);
-  }
-
-  if(is_dir($path)) {
-    $access = fileatime($path);
-  } else if(is_file($path)) {
-    $access = filemtime($path);
-  }
-
-  if(isset($access)) {
-    $file = path(DIR['CACHES'], true) . crc32($path);
-    $file = $file . '.' . $access . '.php';
-
-    if(is_bool($content)) {
-      return (file_exists($file) == $content);
-    } else if(is_null($content)) {
-      if(file_exists($file)) {
-        $content = file_get_contents($file);
-
-        if(preg_match("/^[aO]:.+}$/", $content)) {
-          $content = unserialize($content);
-        }
-      }
-
-      return $content;
-    } else {
-      array_map('unlink', glob(strtok($file, '.') . '.*.php'));
-
-      if(is_array($content) || is_object($content)) {
-        $content = serialize($content);
-      }
-
-      file_put_contents($file, $content);
-    }
-  } else {
-    return false;
-  }
-}
-
 function path($locator = null, $actual = false) {
   if(is_null($locator)) {
     return str_replace('//', '/', '/' . implode(URI, '/') . '/');
@@ -124,13 +83,53 @@ function scribe($string) {
   return $string;
 }
 
+function stash($path, $content = null) {
+  if(!strstr($path, APP['DIR'])) {
+    $path = path($path, true);
+  }
+
+  if(is_dir($path)) {
+    $access = fileatime($path);
+  } else if(is_file($path)) {
+    $access = filemtime($path);
+  }
+
+  if(isset($access)) {
+    $file = path(DIR['CACHES'], true) . crc32($path);
+    $file = $file . '.' . $access . '.php';
+
+    if(is_bool($content)) {
+      return (file_exists($file) == $content);
+    } else if(is_null($content)) {
+      if(file_exists($file)) {
+        $content = file_get_contents($file);
+
+        if(preg_match("/^[aO]:.+}$/", $content)) {
+          $content = unserialize($content);
+        }
+      }
+
+      return $content;
+    } else {
+      array_map('unlink', glob(strtok($file, '.') . '.*.php'));
+
+      if(is_array($content) || is_object($content)) {
+        $content = serialize($content);
+      }
+
+      file_put_contents($file, $content);
+    }
+  } else {
+    return false;
+  }
+}
+
 (function() {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
   define('APP', [
     'DIR' => __DIR__,
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
-    'URI' => $_SERVER['REQUEST_URI'],
-    'LANG' => $_SERVER['HTTP_ACCEPT_LANGUAGE']
+    'URI' => $_SERVER['REQUEST_URI']
   ]);
 
   if(!file_exists('.htaccess')) {
@@ -171,7 +170,7 @@ function scribe($string) {
 })();
 
 (function() {
-  $locales = cache(DIR['LOCALES']) ?? [];
+  $locales = stash(DIR['LOCALES']) ?? [];
 
   if(empty($locales)) {
     $directory = rtrim(path(DIR['LOCALES'], true), '/');
@@ -223,7 +222,7 @@ function scribe($string) {
     }
 
     if(!empty($locales)) {
-      cache(DIR['LOCALES'], $locales);
+      stash(DIR['LOCALES'], $locales);
     }
   }
 
@@ -261,10 +260,11 @@ function scribe($string) {
   define('URI', $uri);
 
   if(!defined('LOCALE') && !empty(SET['LOCALE'])) {
+    $request = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $default = str_replace('+', '-', SET['LOCALE']);
     $uri = implode(URI, '/');
 
-    preg_match_all("/[a-z]{2}-[a-z]{2}/i", APP['LANG'], $request);
+    preg_match_all("/[a-z]{2}-[a-z]{2}/i", $request, $request);
 
     foreach(array_merge(reset($request), [$default]) as $locale) {
       foreach(LOCALES as $locales) {
@@ -279,7 +279,7 @@ function scribe($string) {
 })();
 
 (function() {
-  $helpers = cache(DIR['HELPERS']) ?? [];
+  $helpers = stash(DIR['HELPERS']) ?? [];
 
   if(empty($helpers)) {
     $directory = rtrim(path(DIR['HELPERS'], true), '/');
@@ -289,7 +289,7 @@ function scribe($string) {
     }
 
     if(!empty($helpers)) {
-      cache(DIR['HELPERS'], $helpers);
+      stash(DIR['HELPERS'], $helpers);
     }
   }
 
