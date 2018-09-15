@@ -9,6 +9,7 @@
 
 define('DIR', [
   'CACHES' => '/caches/',
+  'HELPERS' => '/helpers/',
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
   'LOCALES' => '/locales/',
@@ -278,6 +279,26 @@ function scribe($string) {
 })();
 
 (function() {
+  $helpers = cache(DIR['HELPERS']) ?? [];
+
+  if(empty($helpers)) {
+    $directory = rtrim(path(DIR['HELPERS'], true), '/');
+
+    foreach(glob($directory . '/*.php') as $helper) {
+      $helpers[basename($helper, '.php')] = $helper;
+    }
+
+    if(!empty($helpers)) {
+      cache(DIR['HELPERS'], $helpers);
+    }
+  }
+
+  $GLOBALS['helpers'] = array_map(function($helper) {
+    return include($helper);
+  }, $helpers);
+})();
+
+(function() {
   $path = URI;
 
   ini_set('display_errors', SET['ERRORS'] ? 1 : 0);
@@ -301,11 +322,9 @@ function scribe($string) {
       define('PAGEFILE', $page);
 
       relay('CONTENT', function() {
-        unset($path, $page);
+        extract($GLOBALS['helpers']);
 
         require_once PAGEFILE;
-
-        $path = PATH;
       });
 
       if(defined('REDIRECT')) {
@@ -379,6 +398,8 @@ function scribe($string) {
     return $filter;
   });
     if(defined('LAYOUTFILE')) {
+      extract($GLOBALS['helpers']);
+
       require_once LAYOUTFILE;
     } else {
       echo CONTENT;
