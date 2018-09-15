@@ -310,14 +310,14 @@ function stash($path, $content = null) {
   }
 
   do {
-    $page = path(DIR['PAGES'] . '/' . implode('/', $path) . '.php', true);
+    $page = path(DIR['PAGES'], true) . implode('/', $path) . '.php';
 
     if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
       $page = rtrim(str_replace('.php', '', $page), '/');
       $page = $page . '/' . SET['INDEX'] . '.php';
     }
 
-    if(is_file($page)) {
+    if(is_file($page) && end($path) !== SET['INDEX']) {
       define('PATH', $path);
       define('PAGEFILE', $page);
 
@@ -370,11 +370,9 @@ function stash($path, $content = null) {
         }
       }
 
-      if(end($path) !== SET['INDEX']) {
-        break;
-      }
+      break;
     } else if(empty($path)) {
-      return false;
+      exit;
     }
 
     array_pop($path);
