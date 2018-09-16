@@ -279,6 +279,39 @@ function stash($path, $content = null) {
 })();
 
 (function() {
+  $path = URI;
+
+  ini_set('display_errors', SET['ERRORS'] ? 1 : 0);
+
+  if(SET['ERRORS']) {
+    error_reporting(E_ALL);
+  } else {
+    error_reporting(E_ALL & ~(E_NOTICE|E_DEPRECATED));
+  }
+
+  do {
+    $page = path(DIR['PAGES'], true) . implode('/', $path) . '.php';
+
+    if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
+      $page = rtrim(str_replace('.php', '', $page), '/');
+      $page = $page . '/' . SET['INDEX'] . '.php';
+    }
+
+    if(is_file($page) && end($path) !== SET['INDEX']) {
+      define('PAGEFILE', $page);
+
+      break;
+    } else if(empty($path)) {
+      exit;
+    }
+
+    array_pop($path);
+  } while(true);
+
+  define('PATH', $path);
+})();
+
+(function() {
   $helpers = stash(DIR['HELPERS']) ?? [];
 
   if(empty($helpers)) {
@@ -299,84 +332,58 @@ function stash($path, $content = null) {
 })();
 
 (function() {
-  $path = URI;
+  $path = PATH;
 
-  ini_set('display_errors', SET['ERRORS'] ? 1 : 0);
+  if(defined('PAGEFILE')) {
+    relay('CONTENT', function() {
+      extract($GLOBALS['helpers']);
 
-  if(SET['ERRORS']) {
-    error_reporting(E_ALL);
-  } else {
-    error_reporting(E_ALL & ~(E_NOTICE|E_DEPRECATED));
+      require_once PAGEFILE;
+    });
   }
 
-  do {
-    $page = path(DIR['PAGES'], true) . implode('/', $path) . '.php';
-
-    if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
-      $page = rtrim(str_replace('.php', '', $page), '/');
-      $page = $page . '/' . SET['INDEX'] . '.php';
+  if(defined('REDIRECT')) {
+    if(!array_key_exists('host', parse_url(REDIRECT))) {
+      $redirect = path(REDIRECT);
     }
 
-    if(is_file($page) && end($path) !== SET['INDEX']) {
-      define('PATH', $path);
-      define('PAGEFILE', $page);
+    header('Location: ' . $redirect ?? REDIRECT);
 
-      relay('CONTENT', function() {
-        extract($GLOBALS['helpers']);
+    exit;
+  }
 
-        require_once PAGEFILE;
-      });
+  if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
+    $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
+    $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
 
-      if(defined('REDIRECT')) {
-        if(!array_key_exists('host', parse_url(REDIRECT))) {
-          $redirect = path(REDIRECT);
-        }
+    if(file_exists($layout)) {
+      define('LAYOUTFILE', $layout);
+    }
+  }
 
-        header('Location: ' . $redirect ?? REDIRECT);
+  if(defined('ROUTE')) {
+    $facade = array_diff_assoc(URI, $path);
 
-        exit;
-      }
-
-      if((defined('LAYOUT') && !empty(LAYOUT)) || !empty(SET['LAYOUT'])) {
-        $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
-        $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
-
-        if(file_exists($layout)) {
-          define('LAYOUTFILE', $layout);
-        }
-      }
-
-      if(defined('ROUTE')) {
-        $facade = array_diff_assoc(URI, $path);
-
-        foreach(ROUTE as $route) {
-          if(count($route) === count($facade)) {
-            foreach(array_values($facade) as $increment => $segment) {
-              if(is_array($route[$increment])) {
-                if(!in_array($segment, $route[$increment])) {
-                  break;
-                }
-              } else if($route[$increment] !== $segment) {
-                break;
-              }
-
-              if(end($facade) === $segment) {
-                $path = $path + $facade;
-
-                break 2;
-              }
+    foreach(ROUTE as $route) {
+      if(count($route) === count($facade)) {
+        foreach(array_values($facade) as $increment => $segment) {
+          if(is_array($route[$increment])) {
+            if(!in_array($segment, $route[$increment])) {
+              break;
             }
+          } else if($route[$increment] !== $segment) {
+            break;
+          }
+
+          if(end($facade) === $segment) {
+            $path = $path + $facade;
+
+            break 2;
           }
         }
       }
-
-      break;
-    } else if(empty($path)) {
-      exit;
     }
-
-    array_pop($path);
-  } while(true);
+  }
 
   if(array_diff(URI, $path)) {
     header('Location: ' . path(implode('/', $path)));
