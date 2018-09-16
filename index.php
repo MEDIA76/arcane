@@ -268,8 +268,12 @@ function stash($path, $content = null) {
 
     foreach(array_merge(reset($request), [$default]) as $locale) {
       foreach(LOCALES as $locales) {
-        if(preg_grep("/{$locale}/i", array_column($locales, 'CODE'))) {
-          header('Location: ' . path(reset($locales)['URI'] . $uri));
+        $code = preg_grep("/{$locale}/i", array_column($locales, 'CODE'));
+
+        if(!empty($code)) {
+          $code = array_values($locales)[key($code)];
+
+          header('Location: ' . path($code['URI'] . $uri));
 
           exit;
         }
