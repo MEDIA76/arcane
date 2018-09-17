@@ -16,43 +16,43 @@ curl -fsLO copy.getarcane.com/index.php
 - Unique Routing
 - HTML Minification
 - Flexible Structure
+- Autoload Helpers
 - Simple Localization
 - Layout Templates
 - Native PHP Code
 - Zero Dependency
 
-### Structure Example
+### Example
 
 ``` txt
 arcane/
-├── caches/
-├── images/
-│   └── logo.svg
-├── layouts/
-│   ├── partials/
-│   │   ├── footer.php
-│   │   └── header.php
-│   └── default.php
-├── locales/
-│   ├── en/
-│   │   └── en+us.json
-│   ├── es/
-│   │   ├── es+mx.json
-│   │   └── es-us.json
-│   └── us.php
-├── pages/
-│   ├── about.php
-│   ├── blog/
-│   │   ├── entry.php
-│   │   └── index.php
-│   ├── contact.php
-│   ├── index.php
-│   └── services.php
-├── scripts/
-│   └── functions.js
-├── styles/
-│   └── selectors.css
-└── index.php
+├─ caches/
+├─ images/
+│  └─ logo.svg
+├─ layouts/
+│  ├─ partials/
+│  │  ├─ footer.php
+│  │  └─ header.php
+│  └─ default.php
+├─ locales/
+│  ├─ en/
+│  │  └─ en+us.json
+│  ├─ es/
+│  │  ├─ es+mx.json
+│  │  └─ es-us.json
+│  └─ us.php
+├─ pages/
+│  ├─ about.php
+│  ├─ blog/
+│  │  └─ index.php
+│  ├── contact.php
+│  ├── index.php
+│  └── services.php
+├─ scripts/
+│  └─ functions.js
+├─ styles/
+│  └─ selectors.css
+└─ index.php
 ```
 
 ### Support
