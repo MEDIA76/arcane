@@ -26,7 +26,8 @@ curl -fsLO copy.getarcane.com/index.php
 
 ``` txt
 arcane/
-├─ caches/
+├─ helpers/
+│  └─ posts.php
 ├─ images/
 │  └─ logo.svg
 ├─ layouts/
