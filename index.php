@@ -8,7 +8,6 @@
 **/
 
 define('DIR', [
-  'CACHES' => '/caches/',
   'HELPERS' => '/helpers/',
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
@@ -83,47 +82,6 @@ function scribe($string) {
   return $string;
 }
 
-function stash($path, $content = null) {
-  if(!strstr($path, APP['DIR'])) {
-    $path = path($path, true);
-  }
-
-  if(is_dir($path)) {
-    $access = fileatime($path);
-  } else if(is_file($path)) {
-    $access = filemtime($path);
-  }
-
-  if(isset($access)) {
-    $file = path(DIR['CACHES'], true) . crc32($path);
-    $file = $file . '.' . $access . '.php';
-
-    if(is_bool($content)) {
-      return (file_exists($file) == $content);
-    } else if(is_null($content)) {
-      if(file_exists($file)) {
-        $content = file_get_contents($file);
-
-        if(preg_match("/^[aO]:.+}$/", $content)) {
-          $content = unserialize($content);
-        }
-      }
-
-      return $content;
-    } else {
-      array_map('unlink', glob(strtok($file, '.') . '.*.php'));
-
-      if(is_array($content) || is_object($content)) {
-        $content = serialize($content);
-      }
-
-      file_put_contents($file, $content);
-    }
-  } else {
-    return false;
-  }
-}
-
 (function() {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
   define('APP', [
@@ -170,63 +128,55 @@ function stash($path, $content = null) {
 })();
 
 (function() {
-  $locales = stash(DIR['LOCALES']) ?? [];
+  $directory = rtrim(path(DIR['LOCALES'], true), '/');
 
-  if(empty($locales)) {
-    $directory = rtrim(path(DIR['LOCALES'], true), '/');
+  foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
+    $filename = basename($locale, '.json');
+    $major = basename(dirname($locale));
+    $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
 
-    foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
-      $filename = basename($locale, '.json');
-      $major = basename(dirname($locale));
-      $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
+    if(ctype_alpha($minor)) {
+      $uri = '/' . $major . '/';
+      $transcript = [];
 
-      if(ctype_alpha($minor)) {
-        $uri = '/' . $major . '/';
-        $transcript = [];
-
-        foreach([
-          trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
-          dirname($locale) . '/' . $major . '.json',
-          $locale
-        ] as $file) {
-          if(file_exists($file)) {
-            $file = json_decode(file_get_contents($file), true) ?? [];
-            $transcript = $file + $transcript;
-          }
+      foreach([
+        trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
+        dirname($locale) . '/' . $major . '.json',
+        $locale
+      ] as $file) {
+        if(file_exists($file)) {
+          $file = json_decode(file_get_contents($file), true) ?? [];
+          $transcript = $file + $transcript;
         }
-
-        switch(substr($filename, 3)) {
-          case $major:
-            list($language, $country) = [$minor, $major];
-          break;
-
-          case $minor:
-            list($language, $country) = [$major, $minor];
-          break;
-        }
-
-        if(strpos($locale, '+')) {
-          $minor = null;
-        } else {
-          $uri .= $minor . '/';
-        }
-
-        $locales[$major][$minor] = [
-          'CODE' => $language . '-' . $country,
-          'COUNTRY' => $country,
-          'TRANSCRIPT' => $transcript,
-          'LANGUAGE' => $language,
-          'URI' => $uri,
-        ];
       }
-    }
 
-    if(!empty($locales)) {
-      stash(DIR['LOCALES'], $locales);
+      switch(substr($filename, 3)) {
+        case $major:
+          list($language, $country) = [$minor, $major];
+        break;
+
+        case $minor:
+          list($language, $country) = [$major, $minor];
+        break;
+      }
+
+      if(strpos($locale, '+')) {
+        $minor = null;
+      } else {
+        $uri .= $minor . '/';
+      }
+
+      $locales[$major][$minor] = [
+        'CODE' => $language . '-' . $country,
+        'COUNTRY' => $country,
+        'TRANSCRIPT' => $transcript,
+        'LANGUAGE' => $language,
+        'URI' => $uri,
+      ];
     }
   }
 
-  define('LOCALES', $locales);
+  define('LOCALES', $locales ?? []);
 })();
 
 (function() {
@@ -316,23 +266,13 @@ function stash($path, $content = null) {
 })();
 
 (function() {
-  $helpers = stash(DIR['HELPERS']) ?? [];
+  $directory = rtrim(path(DIR['HELPERS'], true), '/');
 
-  if(empty($helpers)) {
-    $directory = rtrim(path(DIR['HELPERS'], true), '/');
-
-    foreach(glob($directory . '/*.php') as $helper) {
-      $helpers[basename($helper, '.php')] = $helper;
-    }
-
-    if(!empty($helpers)) {
-      stash(DIR['HELPERS'], $helpers);
-    }
+  foreach(glob($directory . '/*.php') as $helper) {
+    $helpers[basename($helper, '.php')] = include($helper);
   }
 
-  $GLOBALS['helpers'] = array_map(function($helper) {
-    return include($helper);
-  }, $helpers);
+  $GLOBALS['helpers'] = $helpers ?? [];
 })();
 
 (function() {
