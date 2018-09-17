@@ -59,6 +59,30 @@
 <?= scribe('Welcome'); ?>
 ```
 
+### Helpers
+
+> `filename.php`: Creates `variable` from filename that can be used within pages/layouts.
+
+``` php
+<?php return [
+  'slug' => [
+      'title' => 'Hello, World!'
+  ]
+]; ?>
+
+<?php return function($array, $keys) {
+  $keys = explode('.', $keys);
+
+  foreach($keys as $key) {
+    $array = $array[$key];
+  }
+
+  return $array;
+}; ?>
+```
+
+- Each file's returned code is automatically loaded.
+
 ### Layouts
 
 > `CONTENT`: Returns the page content.
@@ -78,31 +102,31 @@
 
 ``` html
 locales/
-├── ca/
-│   ├── en-ca.json
-│   └── fr-ca.json
-├── mx/
-│   └── es-mx.json
-├── us/
-│   ├── en-us.json
-│   ├── es-us.json
-│   └── us.json
-├── es.json
-└── en.json
+├─ ca/
+│  ├─ en-ca.json
+│  └─ fr-ca.json
+├─ mx/
+│  └─ es-mx.json
+├─ us/
+│  ├─ en-us.json
+│  ├─ es-us.json
+│  └─ us.json
+├─ es.json
+└─ en.json
 
 locales/
-├── en/
-│   ├── en-ca.json
-│   ├── en+us.json
-│   └── en.json
-├── es/
-│   ├── es+mx.json
-│   ├── es-us.json
-│   └── es.json
-├── fr/
-│   └── fr+ca.json
-├── ca.json
-└── us.json
+├─ en/
+│  ├─ en-ca.json
+│  ├─ en+us.json
+│  └─ en.json
+├─ es/
+│  ├─ es+mx.json
+│  ├─ es-us.json
+│  └─ es.json
+├─ fr/
+│  └─ fr+ca.json
+├─ ca.json
+└─ us.json
 ```
 
 - Supports both country or language localization (dictated by folder name).
@@ -126,5 +150,6 @@ locales/
 ]); ?>
 ```
 
-- Within the `/about/` page, the `/about/news/` or `/about/news/history/` routes are allowed.
-- Within the `/blog/` page, the `/post/*/` route is allowed (`*` equals a key within the `$posts` array).
+- Each route array are for multiple route options.
+- Option values `['*', '*']` match `/*/*/` url segments that follow its page segment.
+- Option values can be either `string` or `array`.
