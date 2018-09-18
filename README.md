@@ -14,7 +14,6 @@ curl -fsLO copy.getarcane.com/index.php
 
 - Clean URL Paths
 - Unique Routing
-- HTML Minification
 - Flexible Structure
 - Autoload Helpers
 - Simple Localization

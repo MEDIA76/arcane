@@ -21,8 +21,7 @@ define('SET', [
   'ERRORS' => false,
   'INDEX' => 'index',
   'LAYOUT' => null,
-  'LOCALE' => null,
-  'MINIFY' => true
+  'LOCALE' => null
 ]);
 
 function path($locator = null, $actual = false) {
@@ -333,19 +332,7 @@ function scribe($string) {
     header('Location: ' . path(implode('/', $path)));
 
     exit;
-  }
-})();
-
-(function() {
-  ob_start(function($filter) {
-    if(SET['MINIFY']) {
-      $filter = str_replace([
-        "\r\n", "\r", "\n", "\t"
-      ], '', $filter);
-    }
-
-    return $filter;
-  });
+  } else {
     if(defined('LAYOUTFILE')) {
       extract($GLOBALS['helpers']);
 
@@ -353,7 +340,7 @@ function scribe($string) {
     } else {
       echo CONTENT;
     }
-  ob_get_flush();
+  }
 })();
 
 ?>
