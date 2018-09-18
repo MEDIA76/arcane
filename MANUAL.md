@@ -30,7 +30,7 @@
 
 <?= path('/about/'); ?>
 
-<?= path('/styles/selectors.css', true); ?>
+<?= path('/layouts/header.php', true); ?>
 
 <?= path(2); ?>
 
