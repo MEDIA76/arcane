@@ -58,7 +58,8 @@ arcane/
 ### Support
 
 - Requires Apache & PHP >= 7.0.0
-- [Documentation](MANUAL.md)
+- `AllowOverride All` is required for running within subdirectory.
+- [Examples and Documentation](MANUAL.md)
 
 [Creating an issue](https://github.com/capachow/arcane/issues/) on GitHub for reporting bugs is always appreciated.
 
