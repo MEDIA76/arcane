@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane: Intuitive Web Prototyping
+ * Arcane: Intuitive Microframework
  * Copyright 2017-2018 Joshua Britt
  * https://github.com/capachow/arcane/
  * Released under the MIT License
