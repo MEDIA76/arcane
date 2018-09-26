@@ -285,25 +285,6 @@ function scribe($string) {
     });
   }
 
-  if(defined('REDIRECT')) {
-    if(!array_key_exists('host', parse_url(REDIRECT))) {
-      $redirect = path(REDIRECT);
-    }
-
-    header('Location: ' . $redirect ?? REDIRECT);
-
-    exit;
-  }
-
-  if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
-    $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
-    $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
-
-    if(file_exists($layout)) {
-      define('LAYOUTFILE', $layout);
-    }
-  }
-
   if(defined('ROUTE')) {
     $facade = array_diff_assoc(URI, $path);
 
@@ -333,13 +314,34 @@ function scribe($string) {
 
     exit;
   } else {
-    if(defined('LAYOUTFILE')) {
-      extract($GLOBALS['helpers']);
+    if(defined('REDIRECT')) {
+      if(!array_key_exists('host', parse_url(REDIRECT))) {
+        $redirect = path(REDIRECT);
+      }
 
-      require_once LAYOUTFILE;
-    } else {
-      echo CONTENT;
+      header('Location: ' . $redirect ?? REDIRECT);
+
+      exit;
     }
+
+    if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
+      $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
+      $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
+
+      if(file_exists($layout)) {
+        define('LAYOUTFILE', $layout);
+      }
+    }
+  }
+})();
+
+(function() {
+  if(defined('LAYOUTFILE')) {
+    extract($GLOBALS['helpers']);
+
+    require_once LAYOUTFILE;
+  } else {
+    echo CONTENT;
   }
 })();
 
