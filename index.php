@@ -72,9 +72,9 @@ function relay($define, $content) {
 }
 
 function scribe($string) {
-  if(defined('LOCALE')) {
-    if(array_key_exists($string, LOCALE['TRANSCRIPT'])) {
-      $string = LOCALE['TRANSCRIPT'][$string];
+  if(defined('TRANSCRIPT')) {
+    if(array_key_exists($string, TRANSCRIPT)) {
+      $string = TRANSCRIPT[$string];
     }
   }
 
@@ -136,18 +136,11 @@ function scribe($string) {
 
     if(ctype_alpha($minor)) {
       $uri = '/' . $major . '/';
-      $transcript = [];
-
-      foreach([
-        trim(DIR['LOCALES'], '/') . '/' . $minor . '.json',
+      $files = [
+        dirname($locale, 2) . '/' . $minor . '.json',
         dirname($locale) . '/' . $major . '.json',
         $locale
-      ] as $file) {
-        if(file_exists($file)) {
-          $file = json_decode(file_get_contents($file), true) ?? [];
-          $transcript = $file + $transcript;
-        }
-      }
+      ];
 
       switch(substr($filename, 3)) {
         case $major:
@@ -168,7 +161,7 @@ function scribe($string) {
       $locales[$major][$minor] = [
         'CODE' => $language . '-' . $country,
         'COUNTRY' => $country,
-        'TRANSCRIPT' => $transcript,
+        'FILES' => $files,
         'LANGUAGE' => $language,
         'URI' => $uri,
       ];
@@ -208,7 +201,16 @@ function scribe($string) {
 
   define('URI', $uri);
 
-  if(!defined('LOCALE') && !empty(SET['LOCALE'])) {
+  if(defined('LOCALE')) {
+    foreach(LOCALE['FILES'] as $file) {
+      if(file_exists($file)) {
+        $file = json_decode(file_get_contents($file), true) ?? [];
+        $transcript = $file + ($transcript ?? []);
+      }
+    }
+
+    define('TRANSCRIPT', $transcript);
+  } else if(!empty(SET['LOCALE'])) {
     $request = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $default = str_replace('+', '-', SET['LOCALE']);
     $uri = implode(URI, '/');
@@ -285,25 +287,6 @@ function scribe($string) {
     });
   }
 
-  if(defined('REDIRECT')) {
-    if(!array_key_exists('host', parse_url(REDIRECT))) {
-      $redirect = path(REDIRECT);
-    }
-
-    header('Location: ' . $redirect ?? REDIRECT);
-
-    exit;
-  }
-
-  if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
-    $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
-    $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
-
-    if(file_exists($layout)) {
-      define('LAYOUTFILE', $layout);
-    }
-  }
-
   if(defined('ROUTE')) {
     $facade = array_diff_assoc(URI, $path);
 
@@ -333,13 +316,34 @@ function scribe($string) {
 
     exit;
   } else {
-    if(defined('LAYOUTFILE')) {
-      extract($GLOBALS['helpers']);
+    if(defined('REDIRECT')) {
+      if(!array_key_exists('host', parse_url(REDIRECT))) {
+        $redirect = path(REDIRECT);
+      }
 
-      require_once LAYOUTFILE;
-    } else {
-      echo CONTENT;
+      header('Location: ' . $redirect ?? REDIRECT);
+
+      exit;
     }
+
+    if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
+      $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
+      $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
+
+      if(file_exists($layout)) {
+        define('LAYOUTFILE', $layout);
+      }
+    }
+  }
+})();
+
+(function() {
+  if(defined('LAYOUTFILE')) {
+    extract($GLOBALS['helpers']);
+
+    require_once LAYOUTFILE;
+  } else {
+    echo CONTENT;
   }
 })();
 

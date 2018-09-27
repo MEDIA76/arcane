@@ -7,15 +7,6 @@
 > `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
 > `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching.
 
-### Constants
-
-> `LOCALE`: Contains `array` of current locale data form `LOCALES`. <nobr />  
-> `LOCALES`: Contains `array` of available locales data. <nobr />  
-> `PATH`: Contains `array` of current file segments. <nobr />  
-> `URI`: Contains `array` of current url segments.
-
-- Each `LOCALE` contains `CODE`, `COUNTRY`, `TRANSCRIPT`, `LANGUAGE`, and `URI` keys.
-
 ### Functions
 
 ###### `Path`
@@ -60,7 +51,7 @@
 
 ### Helpers
 
-> `filename.php`: Creates `variable` from filename that can be used within pages/layouts.
+> `filename.php`: Creates a `variable` from filename that can be used within pages/layouts.
 
 ``` php
 <?php return [
@@ -152,3 +143,14 @@ locales/
 - Each route array are for multiple route options.
 - Option values `['*', '*']` match `/*/*/` url segments that follow its page segment.
 - Option values can be either `string` or `array`.
+
+### Constants
+
+> `CONTENT`: Contains output of current page. <nobr />  
+> `LOCALE`: Contains `array` of current locale data from `LOCALES`. <nobr />  
+> `LOCALES`: Contains `array` of available locales data. <nobr />  
+> `PATH`: Contains `array` of current file segments. <nobr />  
+> `URI`: Contains `array` of current url segments.
+
+- Each `LOCALE` contains `CODE`, `COUNTRY`, `FILES`, `LANGUAGE`, and `URI` keys.
+- Other constants include `__ROOT__`, `APP`, `DIR`, `LAYOUTFILE`, `SET`, `PAGEFILE`, `TRANSCRIPT`.
