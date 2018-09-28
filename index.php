@@ -267,10 +267,20 @@ function scribe($string) {
 })();
 
 (function() {
-  $directory = rtrim(path(DIR['HELPERS'], true), '/');
+  $path = explode(path(DIR['PAGES'], true), PAGEFILE, 2)[1];
+  $path = path(DIR['HELPERS'], true) . str_replace('.php', '', $path);
 
-  foreach(glob($directory . '/*.php') as $helper) {
-    $helpers[basename($helper, '.php')] = include($helper);
+  do {
+    $directories[] = $path;
+    $path = dirname($path);
+  } while($path != __ROOT__);
+
+  foreach(array_reverse($directories) as $directory) {
+    if(is_dir($directory)) {
+      foreach(glob($directory . '/*.php') as $helper) {
+        $helpers[basename($helper, '.php')] = include($helper);
+      }
+    }
   }
 
   $GLOBALS['helpers'] = $helpers ?? [];
