@@ -125,6 +125,7 @@ locales/
 
 ### Pages
 
+> `filename.php`: Creates `/filename/` url segment.
 > `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
 > `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('ROUTE', [array])`: Sets acceptable page routes.
