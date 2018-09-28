@@ -51,7 +51,7 @@
 
 ### Helpers
 
-> `filename.php`: Creates a `variable` from filename that can be used within pages/layouts.
+> `filename.php`: Creates a `variable` from filename that can be used within pages.
 
 ``` php
 <?php return [
@@ -71,7 +71,8 @@
 }; ?>
 ```
 
-- Each file's returned code is automatically loaded.
+- Page specific helpers are collected by creating matching `/filename/` directory.
+- Each file's returned code is automatically loaded and traverses each directory upward.
 
 ### Layouts
 
