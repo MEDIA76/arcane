@@ -1,15 +1,17 @@
-# Manual
+## Summary
 
-### Settings
+#### [Settings](#settings), [Functions](#functions) ([Path](#path), [Relay](#relay), [Scribe](#scribe)), [Helpers](#helpers), [Layouts](#layouts), [Pages](#pages), [Constants](#constants)
+
+## Settings
 
 > `'ERRORS' => boolean`: Toggles the display of PHP errors. <nobr />  
 > `'INDEX' => 'filename'`: Sets the default page for directories. <nobr />  
 > `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
 > `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching.
 
-### Functions
+## Functions
 
-###### `Path`
+#### `Path`
 
 > `path(null)`: Returns the current url path `string`. <nobr />  
 > `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. <nobr />  
@@ -30,7 +32,7 @@
 
 - Does not localize paths with file extensions.
 
-###### `Relay`
+#### `Relay`
 
 > `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
 
@@ -41,7 +43,7 @@
 <?php }); ?>
 ```
 
-###### `Scribe`
+#### `Scribe`
 
 > `scribe('text')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
 
@@ -49,7 +51,7 @@
 <?= scribe('Welcome'); ?>
 ```
 
-### Helpers
+## Helpers
 
 > `filename.php`: Creates a `variable` from filename that can be used within pages.
 
@@ -74,7 +76,7 @@
 - Page specific helpers are collected by creating matching `/filename/` directory.
 - Each file's returned code is automatically loaded and traverses each directory upward.
 
-### Layouts
+## Layouts
 
 > `CONTENT`: Returns the page content.
 
@@ -86,7 +88,7 @@
 </html>
 ```
 
-### Locales
+## Locales
 
 > `la-co.json`: Creates `/**/**/`. <nobr />  
 > `la+co.json`: Creates `/**/`.
@@ -124,9 +126,9 @@ locales/
 - Uses IETF language tags with `ISO 639-1` (language/la) and `ISO 3166-1 Alpha-2` (country/co).
 - Singular `ISO` files (la/co) are defaulted and shared locale resources.
 
-### Pages
+## Pages
 
-> `filename.php`: Creates `/filename/` url segment.
+> `filename.php`: Creates `/filename/` url segment. <nobr />  
 > `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
 > `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
 > `define('ROUTE', [array])`: Sets acceptable page routes.
@@ -146,7 +148,7 @@ locales/
 - Option values `['*', '*']` match `/*/*/` url segments that follow its page segment.
 - Option values can be either `string` or `array`.
 
-### Constants
+## Constants
 
 > `CONTENT`: Contains output of current page. <nobr />  
 > `LOCALE`: Contains `array` of current locale data from `LOCALES`. <nobr />  
