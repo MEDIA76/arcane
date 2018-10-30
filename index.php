@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane: Intuitive Microframework
+ * Arcane 18.10.1 Microframework
  * Copyright 2017-2018 Joshua Britt
  * https://github.com/capachow/arcane/
  * Released under the MIT License
