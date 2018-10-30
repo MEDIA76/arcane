@@ -273,7 +273,7 @@ function scribe($string) {
   do {
     $directories[] = $path;
     $path = dirname($path);
-  } while($path != __ROOT__);
+  } while($path != APP['DIR']);
 
   foreach(array_reverse($directories) as $directory) {
     if(is_dir($directory)) {
