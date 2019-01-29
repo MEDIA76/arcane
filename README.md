@@ -6,7 +6,7 @@ Arcane was designed to keep things as easy and minimal as possible. This is not 
 
 ## Download
 
-#### [http://getarcane.com/download/](http://getarcane.com/download/)
+#### [https://getarcane.com/download](https://getarcane.com/download)
 
 ``` shell
 curl -fsLO copy.getarcane.com/index.php
@@ -61,12 +61,12 @@ arcane/
 
 ## Support
 
-- Requires Apache & PHP >= 7.0.0
+- Requires Apache & PHP >= 7.0
 - `AllowOverride All` is required for subdirectory use.
 - [Examples and Documentation](MANUAL.md)
 
-[Creating an issue](https://github.com/capachow/arcane/issues/) on GitHub for reporting bugs is always appreciated.
+[Creating an issue](https://github.com/MEDIA76/arcane/issues) on GitHub for reporting bugs is always appreciated.
 
 ## License
 
-Copyright 2017-2018 [Joshua Britt](https://github.com/capachow/) under the [MIT](LICENSE.md).
+Copyright 2017-2019 [Joshua Britt](https://github.com/capachow) under the [MIT](LICENSE.md).

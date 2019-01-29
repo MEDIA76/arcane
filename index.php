@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Arcane 18.10.1 Microframework
- * Copyright 2017-2018 Joshua Britt
- * https://github.com/capachow/arcane/
+ * Arcane 19.01.1 Microframework
+ * Copyright 2017-2019 Joshua Britt
+ * https://github.com/MEDIA76/arcane/
  * Released under the MIT License
 **/
 
