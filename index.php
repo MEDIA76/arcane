@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.01.1 Microframework
+ * Arcane 19.02.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane/
  * Released under the MIT License
@@ -331,7 +331,7 @@ function scribe($string) {
         $redirect = path(REDIRECT);
       }
 
-      header('Location: ' . $redirect ?? REDIRECT);
+      header('Location: ' . ($redirect ?? REDIRECT));
 
       exit;
     }
