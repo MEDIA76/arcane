@@ -331,7 +331,7 @@ function scribe($string) {
         $redirect = path(REDIRECT);
       }
 
-      header('Location: ' . $redirect ?? REDIRECT);
+      header('Location: ' . ($redirect ?? REDIRECT));
 
       exit;
     }
