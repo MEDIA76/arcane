@@ -6,10 +6,10 @@ Arcane was designed to keep things as easy and minimal as possible. This is not 
 
 ## Download
 
-#### [https://getarcane.com/download](https://getarcane.com/download)
+#### [https://arcane.dev/download](https://arcane.dev/download)
 
 ``` shell
-curl -fsLO copy.getarcane.com/index.php
+curl -fsLO copy.arcane.dev/index.php
 ```
 
 ## Highlights
