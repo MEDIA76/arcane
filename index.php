@@ -71,10 +71,12 @@ function relay($define, $content) {
   define(strtoupper($define), $content);
 }
 
-function scribe($string) {
+function scribe($string, $return = true) {
   if(defined('TRANSCRIPT')) {
     if(array_key_exists($string, TRANSCRIPT)) {
       $string = TRANSCRIPT[$string];
+    } else if(!$return) {
+      $string = null;
     }
   }
 
