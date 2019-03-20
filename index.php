@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.02.1 Microframework
+ * Arcane 19.03.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane/
  * Released under the MIT License
@@ -71,10 +71,12 @@ function relay($define, $content) {
   define(strtoupper($define), $content);
 }
 
-function scribe($string) {
+function scribe($string, $return = true) {
   if(defined('TRANSCRIPT')) {
     if(array_key_exists($string, TRANSCRIPT)) {
       $string = TRANSCRIPT[$string];
+    } else if(!$return) {
+      $string = null;
     }
   }
 
