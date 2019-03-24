@@ -34,21 +34,27 @@
 
 #### `Relay`
 
-> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
+> `relay('DEFINE', function|*)`: Creates a `constant` that yields content into layout pages.
 
 ```php
 <?php relay('SIDEBAR', function() { ?>
   <h2>Heading</h2>
   <p>Paragraph</p>
 <?php }); ?>
+
+<?php relay('TITLE', 'Home'); ?>
 ```
 
 #### `Scribe`
 
-> `scribe('text')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
+> `scribe('text', boolean|*)`: Returns the equivalent translation `string` from JSON file. Pass `false` parameter to return `null`, otherwise returns itself, if unset.
 
 ``` php
 <?= scribe('Welcome'); ?>
+
+<?= scribe('Farewell', false); ?>
+
+<?= scribe('variable.array', []); ?>
 ```
 
 ## Helpers
