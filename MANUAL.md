@@ -34,13 +34,15 @@
 
 #### `Relay`
 
-> `relay('DEFINE', function)`: Creates a `constant` that yields content into layout pages.
+> `relay('DEFINE', function|*)`: Creates a `constant` that yields content into layout pages.
 
 ```php
 <?php relay('SIDEBAR', function() { ?>
   <h2>Heading</h2>
   <p>Paragraph</p>
 <?php }); ?>
+
+<?php relay('TITLE', 'Home'); ?>
 ```
 
 #### `Scribe`
