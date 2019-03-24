@@ -47,10 +47,14 @@
 
 #### `Scribe`
 
-> `scribe('text')`: Returns the equivalent translation `string` from JSON file. Returns itself if unset.
+> `scribe('text', boolean|*)`: Returns the equivalent translation `string` from JSON file. Pass `false` parameter to return `null`, otherwise returns itself, if unset.
 
 ``` php
 <?= scribe('Welcome'); ?>
+
+<?= scribe('Farewell', false); ?>
+
+<?= scribe('variable.array', []); ?>
 ```
 
 ## Helpers

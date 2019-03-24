@@ -74,10 +74,14 @@ function relay($define, $content) {
 function scribe($string, $return = true) {
   if(defined('TRANSCRIPT')) {
     if(array_key_exists($string, TRANSCRIPT)) {
-      $string = TRANSCRIPT[$string];
-    } else if(!$return) {
-      $string = null;
+      return TRANSCRIPT[$string];
     }
+  }
+
+  if(!is_bool($return)) {
+    $string = $return;
+  } else if(!$return) {
+    $string = null;
   }
 
   return $string;
