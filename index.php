@@ -111,13 +111,13 @@ function scribe($string, $return = true) {
     file_put_contents('.htaccess', $htaccess);
   }
 
-  foreach(DIR as $directory => $path) {
+  foreach(DIR as $type => $path) {
     $path = trim($path, '/') . '/';
 
     if(!is_dir($path) && !empty($path)) {
       mkdir($path, 0777, true);
 
-      if($directory === 'PAGES') {
+      if($type === 'PAGES') {
         $html = implode("\n", [
           '<html>',
           '  <body>',
@@ -135,10 +135,10 @@ function scribe($string, $return = true) {
 (function() {
   $directory = rtrim(path(DIR['LOCALES'], true), '/');
 
-    $filename = basename($locale, '.json');
   foreach(glob("{$directory}/*/*[-+]*.json") as $locale) {
+    $tag = basename($locale, '.json');
     $major = basename(dirname($locale));
-    $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
+    $minor = trim(preg_replace("/{$major}/", '', $tag, 1), '+-');
 
     if(ctype_alpha($minor)) {
       $uri = "/{$major}/";
@@ -148,7 +148,7 @@ function scribe($string, $return = true) {
         $locale
       ];
 
-      switch(substr($filename, 3)) {
+      switch(substr($tag, 3)) {
         case $major:
           list($language, $country) = [$minor, $major];
         break;
