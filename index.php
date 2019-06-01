@@ -39,22 +39,22 @@ function path($locator = null, $actual = false) {
         $define = DIR[strtoupper($define)];
 
         if(isset($define) && !empty($define)) {
-          $prepend .= $define;
+          $prepend = "{$prepend}{$define}";
         }
       }
     }
 
     if(!strpos($locator, '.')) {
       if(defined('LOCALE') && !$actual) {
-        $locator = LOCALE['URI'] . '/' . $locator;
+        $locator = LOCALE['URI'] . "/{$locator}";
       }
 
       if(!strpos($locator, '?')) {
-        $locator .= '/';
+        $locator = "{$locator}/";
       }
     }
 
-    $locator = $prepend . '/' . $locator;
+    $locator = "{$prepend}/{$locator}";
     $locator = preg_replace("#(^|[^:])//+#", '\\1/', $locator);
 
     return $locator;
@@ -135,16 +135,16 @@ function scribe($string, $return = true) {
 (function() {
   $directory = rtrim(path(DIR['LOCALES'], true), '/');
 
-  foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
     $filename = basename($locale, '.json');
+  foreach(glob("{$directory}/*/*[-+]*.json") as $locale) {
     $major = basename(dirname($locale));
     $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
 
     if(ctype_alpha($minor)) {
-      $uri = '/' . $major . '/';
+      $uri = "/{$major}/";
       $files = [
-        dirname($locale, 2) . '/' . $minor . '.json',
-        dirname($locale) . '/' . $major . '.json',
+        dirname($locale, 2) . "/{$minor}.json",
+        dirname($locale) . "/{$major}.json",
         $locale
       ];
 
@@ -161,11 +161,11 @@ function scribe($string, $return = true) {
       if(strpos($locale, '+')) {
         $minor = null;
       } else {
-        $uri .= $minor . '/';
+        $uri = "{$uri}{$minor}/";
       }
 
       $locales[$major][$minor] = [
-        'CODE' => $language . '-' . $country,
+        'CODE' => "{$language}-{$country}",
         'COUNTRY' => $country,
         'FILES' => $files,
         'LANGUAGE' => $language,
@@ -255,7 +255,7 @@ function scribe($string, $return = true) {
 
     if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
       $page = rtrim(str_replace('.php', '', $page), '/');
-      $page = $page . '/' . SET['INDEX'] . '.php';
+      $page = "$page/" . SET['INDEX'] . '.php';
     }
 
     if(is_file($page) && end($path) !== SET['INDEX']) {
@@ -344,7 +344,7 @@ function scribe($string, $return = true) {
 
     if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
       $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
-      $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
+      $layout = path(DIR['LAYOUTS'] . "/{$layout}.php", true);
 
       if(file_exists($layout)) {
         define('LAYOUTFILE', $layout);
