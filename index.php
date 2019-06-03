@@ -273,7 +273,7 @@ function scribe($string, $return = true) {
 })();
 
 (function() {
-  $directory = trim(str_replace([__ROOT__, '.php'], '', PAGEFILE), '/');
+  $directory = trim(str_replace([APP['DIR'], '.php'], '', PAGEFILE), '/');
 
   do {
     $paths[] = $directory;
