@@ -182,7 +182,7 @@ function scribe($string, $return = true) {
   $uri = array_filter(array_diff($uri, explode('/', APP['ROOT'])));
 
   if(!empty($uri)) {
-    $uri = array_combine(range(1, count($uri)), $uri);
+    $uri = array_filter(array_merge([''], $uri));
 
     if(array_key_exists($uri[1], LOCALES)) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
@@ -201,7 +201,7 @@ function scribe($string, $return = true) {
     }
 
     if(!empty($uri)) {
-      $uri = array_combine(range(1, count($uri)), $uri);
+      $uri = array_filter(array_merge([''], $uri));
     }
   }
 
