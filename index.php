@@ -273,17 +273,20 @@ function scribe($string, $return = true) {
 })();
 
 (function() {
-  $path = explode(path(DIR['PAGES'], true), PAGEFILE, 2)[1];
-  $path = path(DIR['HELPERS'], true) . str_replace('.php', '', $path);
+  $directory = trim(str_replace([__ROOT__, '.php'], '', PAGEFILE), '/');
 
   do {
-    $directories[] = $path;
-    $path = dirname($path);
-  } while($path != APP['DIR']);
+    $paths[] = $directory;
+    $directory = dirname($directory);
+  } while($directory != '.');
 
-  foreach(array_reverse($directories) as $directory) {
-    if(is_dir($directory)) {
-      foreach(glob($directory . '/*.php') as $helper) {
+  define('PATHS', array_filter(array_merge([''], array_reverse($paths))));
+
+  foreach(PATHS as $directory) {
+    $directory = trim(DIR['HELPERS'], '/') . strstr($directory, '/');
+
+    if(is_dir($directory = path($directory, true))) {
+      foreach(glob("{$directory}/*.php") as $helper) {
         $helpers[basename($helper, '.php')] = include($helper);
       }
     }
