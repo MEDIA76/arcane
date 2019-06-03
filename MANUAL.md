@@ -163,4 +163,4 @@ locales/
 > `URI`: Contains `array` of current url segments.
 
 - Each `LOCALE` contains `CODE`, `COUNTRY`, `FILES`, `LANGUAGE`, and `URI` keys.
-- Other constants include `__ROOT__`, `APP`, `DIR`, `LAYOUTFILE`, `SET`, `PAGEFILE`, `TRANSCRIPT`.
+- Other constants include `__ROOT__`, `APP`, `DIR`, `LAYOUTFILE`, `PAGEFILE`, `PATHS`, `SET`, `TRANSCRIPT`.
