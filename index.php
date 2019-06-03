@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.03.2 Microframework
+ * Arcane 19.06.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -39,22 +39,22 @@ function path($locator = null, $actual = false) {
         $define = DIR[strtoupper($define)];
 
         if(isset($define) && !empty($define)) {
-          $prepend .= $define;
+          $prepend = "{$prepend}{$define}";
         }
       }
     }
 
     if(!strpos($locator, '.')) {
       if(defined('LOCALE') && !$actual) {
-        $locator = LOCALE['URI'] . '/' . $locator;
+        $locator = LOCALE['URI'] . "/{$locator}";
       }
 
       if(!strpos($locator, '?')) {
-        $locator .= '/';
+        $locator = "{$locator}/";
       }
     }
 
-    $locator = $prepend . '/' . $locator;
+    $locator = "{$prepend}/{$locator}";
     $locator = preg_replace("#(^|[^:])//+#", '\\1/', $locator);
 
     return $locator;
@@ -111,13 +111,13 @@ function scribe($string, $return = true) {
     file_put_contents('.htaccess', $htaccess);
   }
 
-  foreach(DIR as $directory => $path) {
+  foreach(DIR as $type => $path) {
     $path = trim($path, '/') . '/';
 
     if(!is_dir($path) && !empty($path)) {
       mkdir($path, 0777, true);
 
-      if($directory === 'PAGES') {
+      if($type === 'PAGES') {
         $html = implode("\n", [
           '<html>',
           '  <body>',
@@ -135,20 +135,20 @@ function scribe($string, $return = true) {
 (function() {
   $directory = rtrim(path(DIR['LOCALES'], true), '/');
 
-  foreach(glob($directory . '/*/*[-+]*.json') as $locale) {
-    $filename = basename($locale, '.json');
+  foreach(glob("{$directory}/*/*[-+]*.json") as $locale) {
+    $tag = basename($locale, '.json');
     $major = basename(dirname($locale));
-    $minor = trim(preg_replace("/{$major}/", '', $filename, 1), '+-');
+    $minor = trim(preg_replace("/{$major}/", '', $tag, 1), '+-');
 
     if(ctype_alpha($minor)) {
-      $uri = '/' . $major . '/';
+      $uri = "/{$major}/";
       $files = [
-        dirname($locale, 2) . '/' . $minor . '.json',
-        dirname($locale) . '/' . $major . '.json',
+        dirname($locale, 2) . "/{$minor}.json",
+        dirname($locale) . "/{$major}.json",
         $locale
       ];
 
-      switch(substr($filename, 3)) {
+      switch(substr($tag, 3)) {
         case $major:
           list($language, $country) = [$minor, $major];
         break;
@@ -161,11 +161,11 @@ function scribe($string, $return = true) {
       if(strpos($locale, '+')) {
         $minor = null;
       } else {
-        $uri .= $minor . '/';
+        $uri = "{$uri}{$minor}/";
       }
 
       $locales[$major][$minor] = [
-        'CODE' => $language . '-' . $country,
+        'CODE' => "{$language}-{$country}",
         'COUNTRY' => $country,
         'FILES' => $files,
         'LANGUAGE' => $language,
@@ -182,7 +182,7 @@ function scribe($string, $return = true) {
   $uri = array_filter(array_diff($uri, explode('/', APP['ROOT'])));
 
   if(!empty($uri)) {
-    $uri = array_combine(range(1, count($uri)), $uri);
+    $uri = array_filter(array_merge([''], $uri));
 
     if(array_key_exists($uri[1], LOCALES)) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
@@ -201,7 +201,7 @@ function scribe($string, $return = true) {
     }
 
     if(!empty($uri)) {
-      $uri = array_combine(range(1, count($uri)), $uri);
+      $uri = array_filter(array_merge([''], $uri));
     }
   }
 
@@ -255,7 +255,7 @@ function scribe($string, $return = true) {
 
     if(!is_file($page) && is_dir(substr($page, 0, -4) . '/')) {
       $page = rtrim(str_replace('.php', '', $page), '/');
-      $page = $page . '/' . SET['INDEX'] . '.php';
+      $page = "$page/" . SET['INDEX'] . '.php';
     }
 
     if(is_file($page) && end($path) !== SET['INDEX']) {
@@ -273,17 +273,20 @@ function scribe($string, $return = true) {
 })();
 
 (function() {
-  $path = explode(path(DIR['PAGES'], true), PAGEFILE, 2)[1];
-  $path = path(DIR['HELPERS'], true) . str_replace('.php', '', $path);
+  $directory = trim(str_replace([__ROOT__, '.php'], '', PAGEFILE), '/');
 
   do {
-    $directories[] = $path;
-    $path = dirname($path);
-  } while($path != APP['DIR']);
+    $paths[] = $directory;
+    $directory = dirname($directory);
+  } while($directory != '.');
 
-  foreach(array_reverse($directories) as $directory) {
-    if(is_dir($directory)) {
-      foreach(glob($directory . '/*.php') as $helper) {
+  define('PATHS', array_filter(array_merge([''], array_reverse($paths))));
+
+  foreach(PATHS as $directory) {
+    $directory = trim(DIR['HELPERS'], '/') . strstr($directory, '/');
+
+    if(is_dir($directory = path($directory, true))) {
+      foreach(glob("{$directory}/*.php") as $helper) {
         $helpers[basename($helper, '.php')] = include($helper);
       }
     }
@@ -344,7 +347,7 @@ function scribe($string, $return = true) {
 
     if(defined('LAYOUT') || !empty(SET['LAYOUT'])) {
       $layout = defined('LAYOUT') ? LAYOUT : SET['LAYOUT'];
-      $layout = path(DIR['LAYOUTS'] . '/' . $layout . '.php', true);
+      $layout = path(DIR['LAYOUTS'] . "/{$layout}.php", true);
 
       if(file_exists($layout)) {
         define('LAYOUTFILE', $layout);
