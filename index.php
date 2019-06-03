@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.06.1 Microframework
+ * Arcane 19.06.2 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -273,7 +273,7 @@ function scribe($string, $return = true) {
 })();
 
 (function() {
-  $directory = trim(str_replace([__ROOT__, '.php'], '', PAGEFILE), '/');
+  $directory = trim(str_replace([APP['DIR'], '.php'], '', PAGEFILE), '/');
 
   do {
     $paths[] = $directory;
