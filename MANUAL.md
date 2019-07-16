@@ -84,8 +84,8 @@
 
 ## Layouts
 
-> `CONTENT`: Returns page content.
-> `SCRIPTS`: Returns javascript tags.
+> `CONTENT`: Returns page content. <nobr />  
+> `SCRIPTS`: Returns javascript tags. <nobr />  
 > `STYLES`: Returns stylesheet tags.
 
 ``` html
