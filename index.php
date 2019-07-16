@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.06.2 Microframework
+ * Arcane 19.07.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -55,7 +55,7 @@ function path($locator = null, $actual = false) {
     }
 
     $locator = "{$prepend}/{$locator}";
-    $locator = preg_replace("#(^|[^:])//+#", '\\1/', $locator);
+    $locator = preg_replace("#(^|[^:])//+#", "\\1/", $locator);
 
     return $locator;
   }
@@ -138,7 +138,7 @@ function scribe($string, $return = true) {
   foreach(glob("{$directory}/*/*[-+]*.json") as $locale) {
     $tag = basename($locale, '.json');
     $major = basename(dirname($locale));
-    $minor = trim(preg_replace("/{$major}/", '', $tag, 1), '+-');
+    $minor = trim(preg_replace("/{$major}/", "", $tag, 1), '+-');
 
     if(ctype_alpha($minor)) {
       $uri = "/{$major}/";
@@ -302,7 +302,7 @@ function scribe($string, $return = true) {
     relay('CONTENT', function() {
       extract($GLOBALS['helpers']);
 
-      require_once PAGEFILE;
+      require PAGEFILE;
     });
   }
 
@@ -351,6 +351,33 @@ function scribe($string, $return = true) {
 
       if(file_exists($layout)) {
         define('LAYOUTFILE', $layout);
+
+        foreach([
+          'js' => 'SCRIPTS',
+          'css' => 'STYLES'
+        ] as $extension => $constant) {
+          $assets = array_merge([
+            (defined('LAYOUT') ? LAYOUT : SET['LAYOUT']) . ".{$extension}"
+          ], preg_filter("/$/", ".{$extension}", PATHS));
+
+          relay($constant, function() use($assets, $constant) {
+            $html = [
+              'SCRIPTS' => '<script src="%s"></script>',
+              'STYLES' => '<link href="%s" rel="stylesheet" />'
+            ];
+
+            foreach($assets as $asset) {
+              $asset = path([$constant, $asset], true);
+
+              if(file_exists($asset)) {
+                $asset = "{$asset}?m=" . filemtime($asset);
+                $asset = str_replace(APP['DIR'], '', $asset);
+
+                echo sprintf($html[$constant], $asset);
+              }
+            }
+          });
+        }
       }
     }
   }
@@ -360,7 +387,7 @@ function scribe($string, $return = true) {
   if(defined('LAYOUTFILE')) {
     extract($GLOBALS['helpers']);
 
-    require_once LAYOUTFILE;
+    require LAYOUTFILE;
   } else {
     echo CONTENT;
   }
