@@ -84,12 +84,18 @@
 
 ## Layouts
 
-> `CONTENT`: Returns the page content.
+> `CONTENT`: Returns page content.
+> `SCRIPTS`: Returns javascript tags.
+> `STYLES`: Returns stylesheet tags.
 
 ``` html
 <html>
+  <head>
+    <?= STYLES; ?>
+  </head>
   <body>
     <?= CONTENT; ?>
+    <?= SCRIPTS; ?>
   </body>
 </html>
 ```

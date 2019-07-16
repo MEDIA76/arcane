@@ -351,6 +351,33 @@ function scribe($string, $return = true) {
 
       if(file_exists($layout)) {
         define('LAYOUTFILE', $layout);
+
+        foreach([
+          'js' => 'SCRIPTS',
+          'css' => 'STYLES'
+        ] as $extension => $constant) {
+          $assets = array_merge([
+            (defined('LAYOUT') ? LAYOUT : SET['LAYOUT']) . ".{$extension}"
+          ], preg_filter("/$/", ".{$extension}", PATHS));
+
+          relay($constant, function() use($assets, $constant) {
+            $html = [
+              'SCRIPTS' => '<script src="%s"></script>',
+              'STYLES' => '<link href="%s" rel="stylesheet" />'
+            ];
+
+            foreach($assets as $asset) {
+              $asset = path([$constant, $asset], true);
+
+              if(file_exists($asset)) {
+                $asset = "{$asset}?m=" . filemtime($asset);
+                $asset = str_replace(APP['DIR'], '', $asset);
+
+                echo sprintf($html[$constant], $asset);
+              }
+            }
+          });
+        }
       }
     }
   }
