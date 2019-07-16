@@ -55,7 +55,7 @@ function path($locator = null, $actual = false) {
     }
 
     $locator = "{$prepend}/{$locator}";
-    $locator = preg_replace("#(^|[^:])//+#", '\\1/', $locator);
+    $locator = preg_replace("#(^|[^:])//+#", "\\1/", $locator);
 
     return $locator;
   }
@@ -138,7 +138,7 @@ function scribe($string, $return = true) {
   foreach(glob("{$directory}/*/*[-+]*.json") as $locale) {
     $tag = basename($locale, '.json');
     $major = basename(dirname($locale));
-    $minor = trim(preg_replace("/{$major}/", '', $tag, 1), '+-');
+    $minor = trim(preg_replace("/{$major}/", "", $tag, 1), '+-');
 
     if(ctype_alpha($minor)) {
       $uri = "/{$major}/";
@@ -302,7 +302,7 @@ function scribe($string, $return = true) {
     relay('CONTENT', function() {
       extract($GLOBALS['helpers']);
 
-      require_once PAGEFILE;
+      require PAGEFILE;
     });
   }
 
@@ -387,7 +387,7 @@ function scribe($string, $return = true) {
   if(defined('LAYOUTFILE')) {
     extract($GLOBALS['helpers']);
 
-    require_once LAYOUTFILE;
+    require LAYOUTFILE;
   } else {
     echo CONTENT;
   }
