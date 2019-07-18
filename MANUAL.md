@@ -1,6 +1,6 @@
 ## Summary
 
-#### [Settings](#settings), [Functions](#functions) ([Path](#path), [Relay](#relay), [Scribe](#scribe)), [Helpers](#helpers), [Layouts](#layouts), [Pages](#pages), [Constants](#constants)
+#### [Settings](#settings), [Functions](#functions) ([Env](#env), [Path](#path), [Relay](#relay), [Scribe](#scribe)), [Helpers](#helpers), [Layouts](#layouts), [Pages](#pages), [Constants](#constants)
 
 ## Settings
 
@@ -9,7 +9,20 @@
 > `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
 > `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching.
 
+- Settings can be defined within `.env` via `SET_` prefix.
+- Like settings, directories can also be defined via `DIR_` prefix.
+
 ## Functions
+
+#### `Env`
+
+> `env(key, string|boolean)`: Returns corresponding environment variable `value`. Pass second parameter as default return if unset.
+
+``` php
+<?php $secret = $env('SECRET_KEY'); ?>
+
+<?php $mode = $env('APP_MODE', 'local'); ?>
+```
 
 #### `Path`
 

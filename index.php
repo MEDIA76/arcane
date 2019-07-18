@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Arcane 19.07.1 Microframework
+ * Arcane 19.07.2 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
 **/
 
-define('DIR', [
+$define['DIR'] = [
   'HELPERS' => '/helpers/',
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
@@ -15,14 +15,24 @@ define('DIR', [
   'PAGES' => '/pages/',
   'SCRIPTS' => '/scripts/',
   'STYLES' => '/styles/'
-]);
+];
 
-define('SET', [
+$define['SET'] = [
   'ERRORS' => false,
   'INDEX' => 'index',
   'LAYOUT' => null,
   'LOCALE' => null
-]);
+];
+
+function env($variable, $default = null) {
+  $variable = getenv($variable) ?: $default;
+
+  if(in_array($variable, ['true', 'false', 'null'])) {
+    return json_decode($variable);
+  }
+
+  return $variable;
+}
 
 function path($locator = null, $actual = false) {
   if(is_null($locator)) {
@@ -87,13 +97,36 @@ function scribe($string, $return = true) {
   return $string;
 }
 
-(function() {
+(function() use($define) {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
+
   define('APP', [
     'DIR' => __DIR__,
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
     'URI' => $_SERVER['REQUEST_URI']
   ]);
+
+  if(file_exists('.env')) {
+    foreach(file('.env') as $line) {
+      if(substr(ltrim($line), 0, 1) != '#') {
+        $variables[] = str_replace(' ', '', $line);
+      }
+    }
+
+    if(isset($variables)) {
+      foreach(array_filter($variables) as $variable) {
+        putenv($variable);
+      }
+    }
+  }
+
+  if(file_exists('.gitignore')) {
+    $gitignore = array_filter(array_map('trim', file('.gitignore')));
+
+    if(!in_array('.env', $gitignore) && !in_array('*', $gitignore)) {
+      file_put_contents('.gitignore', "\n.env", FILE_APPEND);
+    }
+  }
 
   if(!file_exists('.htaccess')) {
     $htaccess = implode("\n", [
@@ -109,6 +142,14 @@ function scribe($string, $return = true) {
     ]);
 
     file_put_contents('.htaccess', $htaccess);
+  }
+
+  foreach($define as $constant => $array) {
+    foreach($array as $key => $default) {
+      $array[$key] = env("{$constant}_{$key}", $default);
+    }
+
+    define($constant, $array);
   }
 
   foreach(DIR as $type => $path) {
