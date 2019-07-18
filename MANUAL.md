@@ -1,6 +1,6 @@
 ## Summary
 
-#### [Settings](#settings), [Functions](#functions) ([Path](#path), [Relay](#relay), [Scribe](#scribe)), [Helpers](#helpers), [Layouts](#layouts), [Pages](#pages), [Constants](#constants)
+#### [Settings](#settings), [Functions](#functions) ([Env](#env), [Path](#path), [Relay](#relay), [Scribe](#scribe)), [Helpers](#helpers), [Layouts](#layouts), [Pages](#pages), [Constants](#constants)
 
 ## Settings
 
@@ -10,6 +10,16 @@
 > `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching.
 
 ## Functions
+
+#### `Env`
+
+> `env(key, string|boolean)`: Returns corresponding environment variable `value`. Pass second parameter as default return if unset.
+
+``` php
+<?php $secret = $env('SECRET_KEY'); ?>
+
+<?php $mode = $env('APP_MODE', 'local'); ?>
+```
 
 #### `Path`
 

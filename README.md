@@ -20,6 +20,7 @@ curl -fsLO copy.arcane.dev/index.php
 - Autoload Helpers
 - Simple Localization
 - Layout Templates
+- Environment File
 - Native PHP Code
 - Zero Dependency
 
@@ -56,6 +57,8 @@ arcane/
 │  └─ functions.js
 ├─ styles/
 │  └─ selectors.css
+├─ .env
+├─ .htaccess
 └─ index.php
 ```
 

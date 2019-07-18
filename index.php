@@ -24,6 +24,16 @@ define('SET', [
   'LOCALE' => null
 ]);
 
+function env($variable, $default = null) {
+  $variable = getenv($variable) ?: $default;
+
+  if(in_array($variable, ['true', 'false', 'null'])) {
+    return json_decode($variable);
+  }
+
+  return $variable;
+}
+
 function path($locator = null, $actual = false) {
   if(is_null($locator)) {
     return str_replace('//', '/', '/' . implode(URI, '/') . '/');
@@ -89,11 +99,34 @@ function scribe($string, $return = true) {
 
 (function() {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
+
   define('APP', [
     'DIR' => __DIR__,
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
     'URI' => $_SERVER['REQUEST_URI']
   ]);
+
+  if(file_exists('.env')) {
+    foreach(file('.env') as $line) {
+      if(substr(ltrim($line), 0, 1) != '#') {
+        $variables[] = str_replace(' ', '', $line);
+      }
+    }
+
+    if(isset($variables)) {
+      foreach(array_filter($variables) as $variable) {
+        putenv($variable);
+      }
+    }
+  }
+
+  if(file_exists('.gitignore')) {
+    $gitignore = array_filter(array_map('trim', file('.gitignore')));
+
+    if(!in_array('.env', $gitignore) && !in_array('*', $gitignore)) {
+      file_put_contents('.gitignore', "\n.env", FILE_APPEND);
+    }
+  }
 
   if(!file_exists('.htaccess')) {
     $htaccess = implode("\n", [
