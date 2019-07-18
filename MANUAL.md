@@ -9,6 +9,9 @@
 > `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
 > `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching.
 
+- Settings can be defined within `.env` via `SET_` prefix.
+- Like settings, directories can also be defined via `DIR_` prefix.
+
 ## Functions
 
 #### `Env`

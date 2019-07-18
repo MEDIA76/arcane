@@ -7,7 +7,7 @@
  * Released under the MIT License
 **/
 
-define('DIR', [
+$define['DIR'] = [
   'HELPERS' => '/helpers/',
   'IMAGES' => '/images/',
   'LAYOUTS' => '/layouts/',
@@ -15,14 +15,14 @@ define('DIR', [
   'PAGES' => '/pages/',
   'SCRIPTS' => '/scripts/',
   'STYLES' => '/styles/'
-]);
+];
 
-define('SET', [
+$define['SET'] = [
   'ERRORS' => false,
   'INDEX' => 'index',
   'LAYOUT' => null,
   'LOCALE' => null
-]);
+];
 
 function env($variable, $default = null) {
   $variable = getenv($variable) ?: $default;
@@ -97,7 +97,7 @@ function scribe($string, $return = true) {
   return $string;
 }
 
-(function() {
+(function() use($define) {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
 
   define('APP', [
@@ -142,6 +142,14 @@ function scribe($string, $return = true) {
     ]);
 
     file_put_contents('.htaccess', $htaccess);
+  }
+
+  foreach($define as $constant => $array) {
+    foreach($array as $key => $default) {
+      $array[$key] = env("{$constant}_{$key}", $default);
+    }
+
+    define($constant, $array);
   }
 
   foreach(DIR as $type => $path) {
