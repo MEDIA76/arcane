@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.08.1 Microframework
+ * Arcane 19.08.2 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -107,24 +107,18 @@ function scribe($string, $return = true) {
   ]);
 
   if(file_exists('.env')) {
-    foreach(file('.env') as $line) {
-      if(substr(ltrim($line), 0, 1) != '#') {
-        $variables[] = str_replace(' ', '', $line);
+    foreach(array_filter(array_map('trim', file('.env'))) as $env) {
+      if(substr($env, 0, 1) != '#') {
+        putenv(str_replace(' ', '', $env));
       }
     }
 
-    if(isset($variables)) {
-      foreach(array_filter($variables) as $variable) {
-        putenv($variable);
+    if(file_exists('.gitignore')) {
+      $gitignore = array_filter(array_map('trim', file('.gitignore')));
+
+      if(!in_array('.env', $gitignore) && !in_array('*', $gitignore)) {
+        file_put_contents('.gitignore', "\n.env", FILE_APPEND);
       }
-    }
-  }
-
-  if(file_exists('.gitignore')) {
-    $gitignore = array_filter(array_map('trim', file('.gitignore')));
-
-    if(!in_array('.env', $gitignore) && !in_array('*', $gitignore)) {
-      file_put_contents('.gitignore', "\n.env", FILE_APPEND);
     }
   }
 
