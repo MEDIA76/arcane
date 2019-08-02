@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.07.2 Microframework
+ * Arcane 19.08.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
