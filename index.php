@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.07.2 Microframework
+ * Arcane 19.08.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -412,7 +412,7 @@ function scribe($string, $return = true) {
 
               if(file_exists($asset)) {
                 $asset = "{$asset}?m=" . filemtime($asset);
-                $asset = str_replace(APP['DIR'], '', $asset);
+                $asset = str_replace(__ROOT__, '', $asset);
 
                 echo sprintf($html[$constant], $asset);
               }
