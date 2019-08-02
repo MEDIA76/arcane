@@ -412,7 +412,7 @@ function scribe($string, $return = true) {
 
               if(file_exists($asset)) {
                 $asset = "{$asset}?m=" . filemtime($asset);
-                $asset = str_replace(APP['DIR'], '', $asset);
+                $asset = str_replace(__ROOT__, '', $asset);
 
                 echo sprintf($html[$constant], $asset);
               }
