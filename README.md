@@ -21,6 +21,7 @@ curl -fsLO copy.arcane.dev/index.php
 - Simple Localization
 - Layout Templates
 - Environment File
+- HTML Minification
 - Native PHP Code
 - Zero Dependency
 

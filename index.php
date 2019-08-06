@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.08.2 Microframework
+ * Arcane 19.08.3 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -21,7 +21,8 @@ $define['SET'] = [
   'ERRORS' => false,
   'INDEX' => 'index',
   'LAYOUT' => null,
-  'LOCALE' => null
+  'LOCALE' => null,
+  'MINIFY' => true
 ];
 
 function env($variable, $default = null) {
@@ -419,13 +420,29 @@ function scribe($string, $return = true) {
 })();
 
 (function() {
-  if(defined('LAYOUTFILE')) {
-    extract($GLOBALS['helpers']);
+  ob_start(function($content) {
+    if(SET['MINIFY']) {
+      $minify = [
+        "/^\h+|\h+$/m" => "",
+        "/[^\S ]+\</s" => "<",
+        "/\>[^\S ]+/s" => ">",
+        "/\n\n+/s" => "\n",
+        "/\<\!--.*?-->/" => ""
+      ];
 
-    require LAYOUTFILE;
-  } else {
-    echo CONTENT;
-  }
+      return preg_replace(array_keys($minify), $minify, $content);
+    } else {
+      return $content;
+    }
+  });
+    if(defined('LAYOUTFILE')) {
+      extract($GLOBALS['helpers']);
+
+      require LAYOUTFILE;
+    } else {
+      echo CONTENT;
+    }
+  ob_end_flush();
 })();
 
 ?>
