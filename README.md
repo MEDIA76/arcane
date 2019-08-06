@@ -48,11 +48,11 @@ arcane/
 │  ├─ about.php
 │  ├─ blog/
 │  │  └─ index.php
-│  ├── contact.php
-│  ├── index.php
-│  └── services.php
+│  ├─ contact.php
+│  ├─ index.php
+│  └─ services.php
 ├─ scripts/
-│  ├── pages/
+│  ├─ pages/
 │  │  └─ contact.js
 │  └─ pages.js
 ├─ styles/
