@@ -36,9 +36,6 @@ arcane/
 ├─ images/
 │  └─ logo.svg
 ├─ layouts/
-│  ├─ partials/
-│  │  ├─ footer.php
-│  │  └─ header.php
 │  └─ default.php
 ├─ locales/
 │  ├─ en/
@@ -55,9 +52,11 @@ arcane/
 │  ├── index.php
 │  └── services.php
 ├─ scripts/
-│  └─ functions.js
+│  ├── pages/
+│  │  └─ contact.js
+│  └─ pages.js
 ├─ styles/
-│  └─ selectors.css
+│  └─ default.css
 ├─ .env
 ├─ .htaccess
 └─ index.php
