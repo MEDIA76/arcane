@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.08.4 Microframework
+ * Arcane 19.08.5 Microframework
  * Copyright 2017-2019 Joshua Britt
  * https://github.com/MEDIA76/arcane
  * Released under the MIT License
@@ -102,7 +102,7 @@ function scribe($string, $return = true) {
   define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
 
   define('APP', [
-    'DIR' => __DIR__,
+    'DIR' => str_replace('\\', '/', __DIR__),
     'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
     'URI' => $_SERVER['REQUEST_URI']
   ]);
