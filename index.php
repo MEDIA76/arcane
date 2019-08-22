@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Arcane 19.08.5 Microframework
+ * Arcane 19.08.6 Microframework
  * Copyright 2017-2019 Joshua Britt
- * https://github.com/MEDIA76/arcane
- * Released under the MIT License
+ * MIT License https://arcane.dev
 **/
 
 $define['DIR'] = [
