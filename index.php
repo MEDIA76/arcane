@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Arcane 19.08.5 Microframework
+ * Arcane 19.08.6 Microframework
  * Copyright 2017-2019 Joshua Britt
- * https://github.com/MEDIA76/arcane
- * Released under the MIT License
+ * MIT License https://arcane.dev
 **/
 
 $define['DIR'] = [
@@ -108,14 +107,14 @@ function scribe($string, $return = true) {
   ]);
 
   if(file_exists('.env')) {
-    foreach(array_filter(array_map('trim', file('.env'))) as $env) {
+    foreach(array_filter(file('.env'), 'trim') as $env) {
       if(substr($env, 0, 1) != '#') {
         putenv(str_replace(' ', '', $env));
       }
     }
 
     if(file_exists('.gitignore')) {
-      $gitignore = array_filter(array_map('trim', file('.gitignore')));
+      $gitignore = array_filter(file('.gitignore'), 'trim');
 
       if(!in_array('.env', $gitignore) && !in_array('*', $gitignore)) {
         file_put_contents('.gitignore', "\n.env", FILE_APPEND);
@@ -218,7 +217,7 @@ function scribe($string, $return = true) {
   $uri = array_filter(array_diff($uri, explode('/', APP['ROOT'])));
 
   if(!empty($uri)) {
-    $uri = array_filter(array_merge([''], $uri));
+    $uri = array_filter(array_merge([0], $uri));
 
     if(array_key_exists($uri[1], LOCALES)) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
@@ -237,7 +236,7 @@ function scribe($string, $return = true) {
     }
 
     if(!empty($uri)) {
-      $uri = array_filter(array_merge([''], $uri));
+      $uri = array_filter(array_merge([0], $uri));
     }
   }
 
@@ -316,7 +315,7 @@ function scribe($string, $return = true) {
     $directory = dirname($directory);
   } while($directory != '.');
 
-  define('PATHS', array_filter(array_merge([''], array_reverse($paths))));
+  define('PATHS', array_filter(array_merge([0], array_reverse($paths))));
 
   foreach(PATHS as $directory) {
     $directory = trim(DIR['HELPERS'], '/') . strstr($directory, '/');
