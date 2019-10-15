@@ -392,13 +392,14 @@ function scribe($string, $return = true) {
           'css' => 'STYLES'
         ] as $extension => $constant) {
           $assets = array_merge([
+            trim(DIR['LAYOUTS'], '/') . ".{$extension}",
             (defined('LAYOUT') ? LAYOUT : SET['LAYOUT']) . ".{$extension}"
           ], preg_filter("/$/", ".{$extension}", PATHS));
 
           relay($constant, function() use($assets, $constant) {
             $html = [
               'SCRIPTS' => '<script src="%s"></script>',
-              'STYLES' => '<link href="%s" rel="stylesheet" />'
+              'STYLES' => '<link rel="stylesheet" href="%s" />'
             ];
 
             foreach($assets as $asset) {
