@@ -61,14 +61,16 @@
 
 #### `Scribe`
 
-> `scribe('text', boolean|*)`: Returns the equivalent translation `string` from JSON file. Pass `false` parameter to return `null`, otherwise returns itself, if unset.
+> scribe(`'text'`|`['text', *]`, `array` = `[]`): Returns the equivalent translation `string` or `string` with fallback value. Pass second parameter to preform key/value replacements.
 
 ``` php
 <?= scribe('Welcome'); ?>
 
-<?= scribe('Farewell', false); ?>
+<?= scribe('Farewell :name', [
+  ':name' => 'John'
+]); ?>
 
-<?= scribe('variable.array', []); ?>
+<?= scribe(['variable.name', false]); ?>
 ```
 
 ## Helpers

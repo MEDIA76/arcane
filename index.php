@@ -81,17 +81,21 @@ function relay($define, $content) {
   define(strtoupper($define), $content);
 }
 
-function scribe($string, $return = true) {
+function scribe($string, $replace = []) {
+  if(is_array($string)) {
+    list($string, $return) = [$string[0], $string[1] ?? ''];
+  }
+
   if(defined('TRANSCRIPT')) {
     if(array_key_exists($string, TRANSCRIPT)) {
-      return TRANSCRIPT[$string];
+      list($string, $return) = [TRANSCRIPT[$string], null];
     }
   }
 
-  if(!is_bool($return)) {
-    $string = $return;
-  } else if(!$return) {
-    $string = null;
+  if(isset($return)) {
+    $string = $return !== '' ? $return : null;
+  } else if(!empty($replace)) {
+    $string = strtr($string, $replace);
   }
 
   return $string;
