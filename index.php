@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.10.2 Microframework
+ * Arcane 19.12.1 Microframework
  * Copyright 2017-2019 Joshua Britt
  * MIT License https://arcane.dev
 **/
@@ -341,10 +341,14 @@ function scribe($string, $return = true) {
     });
   }
 
-  if(defined('ROUTE')) {
+  if(defined('ROUTES')) {
     $facade = array_diff_assoc(URI, $path);
 
-    foreach(ROUTE as $route) {
+    foreach(ROUTES as $route) {
+      if(!is_array($route)) {
+        $route = explode('/', trim($route, '/'));
+      }
+
       if(count($route) === count($facade)) {
         foreach(array_values($facade) as $increment => $segment) {
           if(is_array($route[$increment])) {
