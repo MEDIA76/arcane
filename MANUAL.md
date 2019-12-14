@@ -4,11 +4,11 @@
 
 ## Settings
 
-> `'ERRORS' => boolean`: Toggles the display of PHP errors. <nobr />  
-> `'INDEX' => 'filename'`: Sets the default page for directories. <nobr />  
-> `'LAYOUT' => 'filename'`: Sets the global layout for all pages. Page level overrules global. <nobr />  
-> `'LOCALE' => 'BCP 47'`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
-> `'MINIFY' => boolean`: Toggles the minification of HTML code.
+> `'ERRORS'` => `boolean` = `false`: Toggles the display of PHP errors. <nobr />  
+> `'INDEX'` => `'filename'` = `'index'`: Sets the default page for directories. <nobr />  
+> `'LAYOUT'` => `'filename'` = `null`: Sets the global layout for all pages. Page level overrules global. <nobr />  
+> `'LOCALE'` => `'BCP 47'` = `null`: Sets the default locale for site. This must be set for automated local switching. <nobr />  
+> `'MINIFY'` => `boolean` = `true`: Toggles the minification of HTML code.
 
 - Settings can be defined within `.env` via `SET_` prefix.
 - Like settings, directories can also be defined via `DIR_` prefix.
@@ -17,7 +17,7 @@
 
 #### `Env`
 
-> `env(key, string|boolean)`: Returns corresponding environment variable `value`. Pass second parameter as default return if unset.
+> env(`'KEY'`, `'string'`|`boolean` = `null`): Returns corresponding environment variable `value`. Pass second parameter for fallback value.
 
 ``` php
 <?php $secret = $env('SECRET_KEY'); ?>
@@ -27,28 +27,27 @@
 
 #### `Path`
 
-> `path(null)`: Returns the current url path `string`. <nobr />  
-> `path('/path/', boolean)`: Returns the reconstructed url path `string`. Pass `true` parameter to use real path. <nobr />  
-> `path(integer)`: Returns the requested path segment `string`. Returns `null` if unset. <nobr />  
-> `path(['constant', '/path/'])`: Returns the reconstructed url path `string` under assigned DIR `constant`.
+> path(`null`): Returns the current url path `string`. <nobr />  
+> path(`integer`): Returns the requested path segment `string`. Returns `null` if unset. <nobr />  
+> path(`'/path/'`|`['CONSTANT', '/path/']`, `boolean` = `false`): Returns the reconstructed url path `string` or `string` under assigned DIR `constant`. Pass second parameter to use real path.
 
 ``` php
 <?= path(); ?>
+
+<?= path(2); ?>
 
 <?= path('/about/'); ?>
 
 <?= path('/layouts/header.php', true); ?>
 
-<?= path(2); ?>
-
-<?= path(['IMAGES', '/logo.svg']); ?>
+<?= path(['IMAGES', 'logo.svg']); ?>
 ```
 
 - Does not localize paths with file extensions.
 
 #### `Relay`
 
-> `relay('DEFINE', function|*)`: Creates a `constant` that yields content into layout pages.
+> relay(`'DEFINE'`, `function`|`*`): Creates a `constant` that yields content into layout pages.
 
 ```php
 <?php relay('SIDEBAR', function() { ?>
@@ -61,19 +60,21 @@
 
 #### `Scribe`
 
-> `scribe('text', boolean|*)`: Returns the equivalent translation `string` from JSON file. Pass `false` parameter to return `null`, otherwise returns itself, if unset.
+> scribe(`'text'`|`['text', *]`, `array` = `[]`): Returns the equivalent translation `string` or `string` with fallback value. Pass second parameter to preform key/value replacements.
 
 ``` php
 <?= scribe('Welcome'); ?>
 
-<?= scribe('Farewell', false); ?>
+<?= scribe('Farewell :name', [
+  ':name' => 'John'
+]); ?>
 
-<?= scribe('variable.array', []); ?>
+<?= scribe(['variable.name', false]); ?>
 ```
 
 ## Helpers
 
-> `filename.php`: Creates a `variable` from filename that can be used within pages.
+> `filename`.php: Creates a `variable` from filename that can be used within pages.
 
 ``` php
 <?php return [
@@ -116,8 +117,8 @@
 
 ## Locales
 
-> `la-co.json`: Creates `/**/**/`. <nobr />  
-> `la+co.json`: Creates `/**/`.
+> `la-co`.json: Creates `/**/**/`. <nobr />  
+> `la+co`.json: Creates `/**/`.
 
 ``` html
 locales/
@@ -154,10 +155,10 @@ locales/
 
 ## Pages
 
-> `filename.php`: Creates `/filename/` url segment. <nobr />  
-> `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
-> `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
-> `define('ROUTES', [array])`: Sets acceptable page routes.
+> `filename`.php: Creates `/filename/` url segment. <nobr />  
+> define(`'LAYOUT'`, `'filename'`): Sets the page layout. <nobr />  
+> define(`'REDIRECT'`, `'/path/'`): Redirects page. <nobr />  
+> define(`'ROUTES'`, `array`): Sets acceptable page routes.
 
 ``` php
 <?php define('ROUTES', [
