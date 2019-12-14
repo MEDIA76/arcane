@@ -1,6 +1,6 @@
 ## Arcane
 
-Arcane is unconventional, but beautifully intuitive. It aims to make simple web prototyping or developing even faster by automating the features you want while making it easier to apply the ones you need, all with just one tiny file of ~10kb.
+Arcane is unconventional, but beautifully intuitive. It aims to make simple web prototyping or developing even faster by automating the features you want while making it easier to apply the ones you need, all with just one tiny file of ~11kb.
 
 Arcane was designed to keep things as easy and minimal as possible, making it perfect for beginners and designers. This is not a full featured framework and instead was created to provide a fast and flexible solution for building small web projects with little to zero setup time. Simply upload Arcane's `index.php` within your root [or sub] directory and visit the file via your web browser.
 
