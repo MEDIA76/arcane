@@ -157,22 +157,23 @@ locales/
 > `filename.php`: Creates `/filename/` url segment. <nobr />  
 > `define('LAYOUT', 'filename')`: Sets the page layout. <nobr />  
 > `define('REDIRECT', '/path/')`: Redirects page. <nobr />  
-> `define('ROUTE', [array])`: Sets acceptable page routes.
+> `define('ROUTES', [array])`: Sets acceptable page routes.
 
 ``` php
-<?php define('ROUTE', [
+<?php define('ROUTES', [
   ['news'],
   ['news', 'history']
 ]); ?>
 
-<?php define('ROUTE', [
+<?php define('ROUTES', [
   ['post', array_keys($posts)]
 ]); ?>
 ```
 
-- Each route array are for multiple route options.
-- Option values `['*', '*']` match `/*/*/` url segments that follow its page segment.
-- Option values can be either `string` or `array`.
+- Routes `array` values are for multiple route options.
+- Route option `string` values are converted to `array` by `/`.
+- Route option `array` values `['*', '*']` match `/*/*/` url segments.
+- Route option `array` values can be either `string` or `array`.
 
 ## Constants
 
