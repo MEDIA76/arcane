@@ -49,14 +49,14 @@ function path($locator = null, $actual = false) {
         $define = DIR[strtoupper($define)];
 
         if(isset($define) && !empty($define)) {
-          $prepend = "{$prepend}{$define}";
+          $locator = "{$define}/{$locator}";
         }
       }
     }
 
     if(!strpos($locator, '.')) {
       if(defined('LOCALE') && !$actual) {
-        $locator = LOCALE['URI'] . "/{$locator}";
+        $prepend = LOCALE['URI'];
       }
 
       if(!strpos($locator, '?')) {
@@ -208,7 +208,7 @@ function scribe($string, $replace = []) {
         'COUNTRY' => $country,
         'FILES' => $files,
         'LANGUAGE' => $language,
-        'URI' => "/$uri/",
+        'URI' => APP['ROOT'] . "{$uri}/",
       ];
     }
   }
@@ -269,7 +269,7 @@ function scribe($string, $replace = []) {
         if(!empty($code)) {
           $code = array_values($locales)[key($code)];
 
-          header('Location: ' . path($code['URI'] . $uri));
+          header("Location: {$code['URI']}" . ltrim("{$uri}/", '/'));
 
           exit;
         }
