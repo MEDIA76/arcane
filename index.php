@@ -180,7 +180,6 @@ function scribe($string, $replace = []) {
     $minor = trim(preg_replace("/{$major}/", "", $tag, 1), '+-');
 
     if(ctype_alpha($minor)) {
-      $uri = "/{$major}/";
       $files = [
         dirname($locale, 2) . "/{$minor}.json",
         dirname($locale) . "/{$major}.json",
@@ -198,9 +197,10 @@ function scribe($string, $replace = []) {
       }
 
       if(strpos($locale, '+')) {
+        $url = $major;
         $minor = null;
       } else {
-        $uri = "{$uri}{$minor}/";
+        $url = "{$major}/{$minor}";
       }
 
       $locales[$major][$minor] = [
@@ -208,7 +208,7 @@ function scribe($string, $replace = []) {
         'COUNTRY' => $country,
         'FILES' => $files,
         'LANGUAGE' => $language,
-        'URI' => $uri,
+        'URL' => APP['ROOT'] . "{$url}/"
       ];
     }
   }
