@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.12.3 Microframework
+ * Arcane 19.12.2 Microframework
  * Copyright 2017-2019 Joshua Britt
  * MIT License https://arcane.dev
 **/
@@ -197,10 +197,10 @@ function scribe($string, $replace = []) {
       }
 
       if(strpos($locale, '+')) {
-        $url = $major;
+        $uri = $major;
         $minor = null;
       } else {
-        $url = "{$major}/{$minor}";
+        $uri = "{$major}/{$minor}";
       }
 
       $locales[$major][$minor] = [
@@ -208,7 +208,7 @@ function scribe($string, $replace = []) {
         'COUNTRY' => $country,
         'FILES' => $files,
         'LANGUAGE' => $language,
-        'URL' => APP['ROOT'] . "{$url}/"
+        'URI' => "/$uri/",
       ];
     }
   }
