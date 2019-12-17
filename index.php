@@ -218,12 +218,10 @@ function scribe($string, $replace = []) {
 })();
 
 (function() {
-  $uri = explode('/', strtok(APP['URI'], '?'));
-  $uri = array_filter(array_diff($uri, explode('/', APP['ROOT'])));
+  $uri = rtrim(substr(APP['URI'], strlen(APP['ROOT'])), '/');
+  $uri = array_filter(array_merge([0], explode('/', $uri)));
 
   if(!empty($uri)) {
-    $uri = array_filter(array_merge([0], $uri));
-
     if(array_key_exists($uri[1], LOCALES)) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
         $locale = LOCALES[$uri[1]][$uri[2]];
