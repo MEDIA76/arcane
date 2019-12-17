@@ -107,6 +107,7 @@ function scribe($string, $replace = []) {
   define('APP', [
     'DIR' => str_replace('\\', '/', rtrim(__DIR__, '/') . '/'),
     'ROOT' => substr(rtrim(__DIR__, '/') . '/', strlen(__ROOT__) - 1),
+    'QUERY' => $_SERVER['QUERY_STRING'],
     'URI' => strtok($_SERVER['REQUEST_URI'], '?')
   ]);
 
