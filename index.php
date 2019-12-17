@@ -102,12 +102,12 @@ function scribe($string, $replace = []) {
 }
 
 (function() use($define) {
-  define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
+  define('__ROOT__', rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/');
 
   define('APP', [
-    'DIR' => str_replace('\\', '/', __DIR__),
-    'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
-    'URI' => $_SERVER['REQUEST_URI']
+    'DIR' => str_replace('\\', '/', rtrim(__DIR__, '/') . '/'),
+    'ROOT' => substr(rtrim(__DIR__, '/') . '/', strlen(__ROOT__) - 1),
+    'URI' => strtok($_SERVER['REQUEST_URI'], '?')
   ]);
 
   if(file_exists('.env')) {
@@ -414,7 +414,7 @@ function scribe($string, $replace = []) {
               $asset = path([$constant, $asset], true);
 
               if(file_exists($asset)) {
-                $asset = "{$asset}?m=" . filemtime($asset);
+                $asset = "/{$asset}?m=" . filemtime($asset);
                 $asset = str_replace(__ROOT__, '', $asset);
 
                 echo sprintf($html[$constant], $asset);
