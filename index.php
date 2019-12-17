@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 19.12.3 Microframework
+ * Arcane 19.12.4 Microframework
  * Copyright 2017-2019 Joshua Britt
  * MIT License https://arcane.dev
 **/
@@ -102,12 +102,13 @@ function scribe($string, $replace = []) {
 }
 
 (function() use($define) {
-  define('__ROOT__', $_SERVER['DOCUMENT_ROOT']);
+  define('__ROOT__', rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/');
 
   define('APP', [
-    'DIR' => str_replace('\\', '/', __DIR__),
-    'ROOT' => substr(__DIR__ . '/', strlen(realpath(__ROOT__))),
-    'URI' => $_SERVER['REQUEST_URI']
+    'DIR' => str_replace('\\', '/', rtrim(__DIR__, '/') . '/'),
+    'ROOT' => substr(rtrim(__DIR__, '/') . '/', strlen(__ROOT__) - 1),
+    'QUERY' => $_SERVER['QUERY_STRING'],
+    'URI' => strtok($_SERVER['REQUEST_URI'], '?')
   ]);
 
   if(file_exists('.env')) {
@@ -217,12 +218,10 @@ function scribe($string, $replace = []) {
 })();
 
 (function() {
-  $uri = explode('/', strtok(APP['URI'], '?'));
-  $uri = array_filter(array_diff($uri, explode('/', APP['ROOT'])));
+  $uri = rtrim(substr(APP['URI'], strlen(APP['ROOT'])), '/');
+  $uri = array_filter(array_merge([0], explode('/', $uri)));
 
   if(!empty($uri)) {
-    $uri = array_filter(array_merge([0], $uri));
-
     if(array_key_exists($uri[1], LOCALES)) {
       if(isset($uri[2]) && array_key_exists($uri[2], LOCALES[$uri[1]])) {
         $locale = LOCALES[$uri[1]][$uri[2]];
@@ -323,8 +322,9 @@ function scribe($string, $replace = []) {
 
   foreach(PATHS as $directory) {
     $directory = trim(DIR['HELPERS'], '/') . strstr($directory, '/');
+    $directory = rtrim(path($directory, true), '/');
 
-    if(is_dir($directory = path($directory, true))) {
+    if(is_dir($directory)) {
       foreach(glob("{$directory}/*.php") as $helper) {
         $helpers[basename($helper, '.php')] = include($helper);
       }
@@ -414,7 +414,7 @@ function scribe($string, $replace = []) {
               $asset = path([$constant, $asset], true);
 
               if(file_exists($asset)) {
-                $asset = "{$asset}?m=" . filemtime($asset);
+                $asset = "/{$asset}?m=" . filemtime($asset);
                 $asset = str_replace(__ROOT__, '', $asset);
 
                 echo sprintf($html[$constant], $asset);
