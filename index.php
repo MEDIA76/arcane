@@ -324,8 +324,9 @@ function scribe($string, $replace = []) {
 
   foreach(PATHS as $directory) {
     $directory = trim(DIR['HELPERS'], '/') . strstr($directory, '/');
+    $directory = rtrim(path($directory, true), '/');
 
-    if(is_dir($directory = path($directory, true))) {
+    if(is_dir($directory)) {
       foreach(glob("{$directory}/*.php") as $helper) {
         $helpers[basename($helper, '.php')] = include($helper);
       }
