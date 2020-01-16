@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Arcane 19.12.4 Microframework
- * Copyright 2017-2019 Joshua Britt
+ * Arcane 20.01.1 Microframework
+ * Copyright 2017-2020 Joshua Britt
  * MIT License https://arcane.dev
 **/
 
