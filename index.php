@@ -102,14 +102,17 @@ function scribe($string, $replace = []) {
 }
 
 (function() use($define) {
-  define('__ROOT__', rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/');
-
-  define('APP', [
-    'DIR' => str_replace('\\', '/', rtrim(__DIR__, '/') . '/'),
-    'ROOT' => substr(rtrim(__DIR__, '/') . '/', strlen(__ROOT__) - 1),
-    'QUERY' => $_SERVER['QUERY_STRING'],
+  $app = [
+    'DIR' => dirname($_SERVER['SCRIPT_FILENAME']) . '/',
+    'ROOT' => rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/',
+    'QUERY' => urldecode($_SERVER['QUERY_STRING']),
     'URI' => strtok($_SERVER['REQUEST_URI'], '?')
-  ]);
+  ];
+
+  define('APP', array_merge($app, [
+    'DIR' => str_replace('\\', '/', $app['DIR']),
+    'ROOT' => substr($app['DIR'], strlen($app['ROOT']) - 1)
+  ]));
 
   if(file_exists('.env')) {
     foreach(array_filter(array_map('trim', file('.env'))) as $env) {
@@ -415,7 +418,7 @@ function scribe($string, $replace = []) {
 
               if(file_exists($asset)) {
                 $asset = "/{$asset}?m=" . filemtime($asset);
-                $asset = str_replace(__ROOT__, '', $asset);
+                $asset = path(str_replace(APP['DIR'], '', $asset));
 
                 echo sprintf($html[$constant], $asset);
               }
