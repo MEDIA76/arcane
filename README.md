@@ -65,9 +65,10 @@ arcane/
 ## Support
 
 - Requires Apache & PHP >= 7.0
-- `AllowOverride All` is required for subdirectory use.
+- `AllowOverride All` directive is required.
 - [Examples and Documentation](MANUAL.md)
 - [Collection of Helpers](https://github.com/MEDIA76/helpers)
+- [Simple Markdown Blog Example](https://github.com/capachow/arcane-blog)
 
 [Creating an issue](https://github.com/MEDIA76/arcane/issues) on GitHub for reporting bugs is always appreciated.
 
