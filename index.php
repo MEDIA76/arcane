@@ -114,8 +114,10 @@ function scribe($string, $replace = []) {
     'ROOT' => substr($app['DIR'], strlen($app['ROOT']) - 1)
   ]));
 
-  if(file_exists('.env')) {
-    foreach(array_filter(array_map('trim', file('.env'))) as $env) {
+  if(file_exists('.env') || file_exists('.env.example')) {
+    $envs = file_exists('.env') ? file('.env') : file('.env.example');
+
+    foreach(array_filter(array_map('trim', $envs)) as $env) {
       if(substr($env, 0, 1) != '#') {
         putenv(str_replace(' ', '', $env));
       }
