@@ -36,7 +36,7 @@ function env($variable, $default = null) {
 
 function path($locator = null, $actual = false) {
   if(is_null($locator)) {
-    return str_replace('//', '/', '/' . implode(URI, '/') . '/');
+    return str_replace('//', '/', '/' . implode('/', URI) . '/');
   } else if(is_int($locator)) {
     return URI[$locator] ?? null;
   } else {
@@ -260,7 +260,7 @@ function scribe($string, $replace = []) {
   } else if(!empty(SET['LOCALE'])) {
     $request = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
     $default = str_replace('+', '-', SET['LOCALE']);
-    $uri = implode(URI, '/');
+    $uri = implode('/', URI);
 
     preg_match_all("/[a-z]{2}-[a-z]{2}/i", $request, $request);
 
