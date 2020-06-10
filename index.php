@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arcane 20.06.1 Microframework
+ * Arcane 20.06.2 Microframework
  * Copyright 2017-2020 Joshua Britt
  * MIT License https://arcane.dev
 **/
@@ -114,8 +114,10 @@ function scribe($string, $replace = []) {
     'ROOT' => substr($app['DIR'], strlen($app['ROOT']) - 1)
   ]));
 
-  if(file_exists('.env')) {
-    foreach(array_filter(array_map('trim', file('.env'))) as $env) {
+  if(file_exists('.env') || file_exists('.env.example')) {
+    $envs = file_exists('.env') ? file('.env') : file('.env.example');
+
+    foreach(array_filter(array_map('trim', $envs)) as $env) {
       if(substr($env, 0, 1) != '#') {
         putenv(str_replace(' ', '', $env));
       }

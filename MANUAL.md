@@ -25,6 +25,8 @@
 <?php $mode = $env('APP_MODE', 'local'); ?>
 ```
 
+- Defaulted `.env.example` keys will be read unless a `.env` file exists.
+
 #### `Path`
 
 > path(`null`): Returns the current url path `string`. <nobr />  
