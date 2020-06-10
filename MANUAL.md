@@ -98,6 +98,11 @@
 
 - Page specific helpers are collected by creating matching `/filename/` directory.
 - Each file's returned code is automatically loaded and traverses each directory upward.
+- Helpers can not be used within other helpers unless they are `include()`:
+
+``` php
+$filename = include(path(['HELPERS', 'filename.php'], true));
+```
 
 ## Layouts
 
