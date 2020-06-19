@@ -122,6 +122,8 @@ $filename = include(path(['HELPERS', 'filename.php'], true));
 </html>
 ```
 
+- `SCRIPTS` and `STYLES` will automatically use matching layout `filename`.css within each directory and page `filename`.css within a `/page/` subdirectory (nested accordingly).
+
 ## Locales
 
 > `la-co`.json: Creates `/**/**/`. <nobr />  
