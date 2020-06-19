@@ -122,7 +122,7 @@ $filename = include(path(['HELPERS', 'filename.php'], true));
 </html>
 ```
 
-- `SCRIPTS` and `STYLES` will automatically use matching layout `filename`.css within each directory and page `filename`.css within a `/page/` subdirectory (nested accordingly).
+- `SCRIPTS` and `STYLES` will automatically use matching layout `filename`.js/css within each directory and page `filename`.js/css within a `/page/` subdirectory (nested accordingly).
 
 ## Locales
 
