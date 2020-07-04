@@ -136,6 +136,7 @@ function scribe($string, $replace = []) {
     $htaccess = implode("\n", [
       '<IfModule mod_rewrite.c>',
       '  RewriteEngine On',
+      '  RewriteRule (^|/)\. - [F]',
       '  RewriteCond %{REQUEST_URI} !(/$|\.|^$)',
       '  RewriteRule ^(.*)$ %{REQUEST_URI}/ [L,R=301]',
       '  RewriteCond %{REQUEST_FILENAME} !-f',
