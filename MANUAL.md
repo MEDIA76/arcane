@@ -20,9 +20,9 @@
 > env(`'KEY'`, `'string'`|`boolean` = `null`): Returns corresponding environment variable `value`. Pass second parameter for fallback value.
 
 ``` php
-<?php $secret = $env('SECRET_KEY'); ?>
+<?php $secret = env('SECRET_KEY'); ?>
 
-<?php $mode = $env('APP_MODE', 'local'); ?>
+<?php $mode = env('APP_MODE', 'local'); ?>
 ```
 
 - Defaulted `.env.example` keys will be read unless a `.env` file exists.
