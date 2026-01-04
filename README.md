@@ -74,4 +74,4 @@ arcane/
 
 ## License
 
-Copyright 2017-2025 [Joshua Britt](https://github.com/capachow) under the [MIT](LICENSE.md).
+Copyright 2017-2026 [Joshua Britt](https://github.com/capachow) under the [MIT](LICENSE.md).

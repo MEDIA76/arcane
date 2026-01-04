@@ -2,7 +2,7 @@
 
 /**
  * Arcane 20.07.1 Microframework
- * Copyright 2017-2020 Joshua Britt
+ * Copyright 2017-2026 Joshua Britt
  * MIT License https://arcane.dev
 **/
 
