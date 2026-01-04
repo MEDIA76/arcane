@@ -64,7 +64,7 @@ arcane/
 
 ## Support
 
-- Requires Apache & PHP >= 8.3
+- Requires Apache & PHP >= 8.2
 - `AllowOverride All` directive is required.
 - [Documentation & Examples](https://github.com/MEDIA76/arcane/blob/master/MANUAL.md)
 - [Collection of Arcane Helpers](https://github.com/MEDIA76/arcane-helpers)
